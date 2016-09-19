@@ -1,0 +1,2 @@
+command folder 
+run `artisan make-command new_command` to create new command with name new_command

@@ -1,0 +1,2 @@
+folder for jobs
+add job to app config (Config/app.js) and run `artisan missing-job` 
