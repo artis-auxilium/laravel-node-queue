@@ -1,4 +1,4 @@
-[![Code Climate](https://codeclimate.com/github/icfr/laravel-queue/badges/gpa.svg)](https://codeclimate.com/github/icfr/laravel-queue)
+[![Code Climate](https://codeclimate.com/github/icfr/laravel-node-queue/badges/gpa.svg)](https://codeclimate.com/github/icfr/laravel-node-queue)
 
 # node server for Laravel queue
 
@@ -127,7 +127,7 @@ Complete documentation will come soon...
 
 php artisan queue:listen use pooling and use cpu to check if job need to run
 
-node wait on event and do job when arrive so it use less cpu
+node is event-driven and do job when arrive so it use less cpu
 
 #### to-do
 
