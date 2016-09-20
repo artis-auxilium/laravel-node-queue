@@ -65,7 +65,6 @@ var createJob = function createJob(jobName) {
   jobFile += "queue.on('job succeeded', reportResult);\n";
   jobFile += "queue.on('job retrying', retrying);\n";
   jobFile += "queue.on('job failed', failed);\n});\n";
-  jobFile += "var job;\n";
   jobFile += "var add = function(options) {\n";
   jobFile += "return queue.createJob(options).retries(3).save();\n};\n\n";
   jobFile += "module.exports.add = add;\n";
