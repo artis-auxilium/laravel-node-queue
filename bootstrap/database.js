@@ -6,6 +6,7 @@ var each = require('lodash/each');
 var includeAll = require('include-all');
 
 var setAssociation = function setAssociation(modelDef, modelName) {
+  /* istanbul ignore else*/
   if (modelDef.associate !== null && typeof modelDef.associate === 'function') {
     modelDef.associate();
     console.debug('associate ' + modelName);

@@ -1,10 +1,11 @@
 'use strict';
 /* global app,config,appdir*/
-var shell = require('../lib/shell');
+
 var each = require('lodash/each');
 var includeAll = require('include-all');
 var path = require('path');
 require('.');
+var shell = require('../lib/shell');
 global.app = new shell({
   chdir: appdir + '/'
 });
