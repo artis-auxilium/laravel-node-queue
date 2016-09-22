@@ -1,6 +1,10 @@
 [![Code Climate](https://codeclimate.com/github/icfr/laravel-node-queue/badges/gpa.svg)](https://codeclimate.com/github/icfr/laravel-node-queue)
+[![Test Coverage](https://codeclimate.com/github/icfr/laravel-node-queue/badges/coverage.svg)](https://codeclimate.com/github/icfr/laravel-node-queue/coverage)
+[![Issue Count](https://codeclimate.com/github/icfr/laravel-node-queue/badges/issue_count.svg)](https://codeclimate.com/github/icfr/laravel-node-queue)
 
 # node server for Laravel queue
+
+[![NPM](https://nodei.co/npm/laravel-queue.png)](https://nodei.co/npm/laravel-queue/)
 
 Process job on laravel events
 
@@ -131,7 +135,7 @@ node is event-driven and do job when arrive so it use less cpu
 
 #### to-do
 
-- [ ] write test
+- [x] write test
 - [ ] write doc
 - [ ] import from other databases (postgresql,sqlite,...)
 
