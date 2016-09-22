@@ -25,6 +25,11 @@ module.exports = {
       chdir: appdir + '/'
     });
     app.config = rewire('../../bootstrap/config')();
+    app.config.laravel.addToApp = {
+      job: {
+        example: "example"
+      }
+    };
     app.configure(function configureApp() {
       app.use(shell.router({
         shell: app
