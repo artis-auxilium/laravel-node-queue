@@ -8,7 +8,9 @@
   "scripts": {
     "pretest": "./test/scripts/clean.sh",
     "test": "istanbul cover nodeunit -- test/ --reporter nested",
-    "postinstall": "./scripts/install.sh"
+    "posttest": "./test/scripts/clean.sh",
+    "postinstall": "./scripts/install.sh",
+    "gen-docs": "jsdoc --configure .jsdoc.json --verbose"
   },
   "bin": {
     "artisan": "./bin/artisan",
@@ -54,5 +56,8 @@
     "sequelize": "^3.24.3",
     "shelljs": "^0.7.4",
     "tmp": "0.0.28"
+  },
+  "devDependencies": {
+    "minami": "^1.1.1"
   }
 }
