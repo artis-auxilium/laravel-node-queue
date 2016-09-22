@@ -1,5 +1,5 @@
 'use strict';
-/* global appdir,Promise */
+/* global app,appdir,Promise,bug */
 
 var jsBeautify = require('js-beautify').js_beautify;
 var fs = require('fs-promise');
@@ -25,7 +25,7 @@ var createCommand = function createCommand(cmdName) {
 };
 
 module.exports = {
-  pattern: 'make-commande :command_name',
+  pattern: 'make-command :command_name',
   help: 'Make a commande file',
   function: function run(req, res) {
     createCommand(req.params.command_name)
@@ -35,7 +35,16 @@ module.exports = {
 
       })
       .catch(function catchError(err) {
-        console.log(err);
+        res.red(err.message).ln();
+        /* istanbul ignore if*/
+        if (typeof app.config.app !== "undefined" && app.config.app.debug) {
+          res.red(err.stack.replace(err.message, ''));
+        }
+        /* istanbul ignore if*/
+        if (bug) {
+          bug.captureException(err);
+        }
+        res.prompt();
       });
   }
 };

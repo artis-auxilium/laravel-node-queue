@@ -169,8 +169,16 @@ module.exports = {
       })
 
     .catch(function catchError(err) {
-      console.log(err);
-      res.prompt();
+        res.red(err.message).ln();
+        /* istanbul ignore if*/
+        if (typeof app.config.app !== "undefined" && app.config.app.debug) {
+          res.red(err.stack.replace(err.message, ''));
+        }
+        /* istanbul ignore if*/
+        if (bug) {
+          bug.captureException(err);
+        }
+        res.prompt();
     });
 
   }

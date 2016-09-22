@@ -1,7 +1,8 @@
 'use strict';
-/* global app */
+/* global app,bug */
 /* eslint global-require: 0 */
 var utils = require('../lib/utilsCmd');
+
 module.exports = {
   pattern: 'model-creator',
   help: 'Create model from database',
@@ -17,9 +18,14 @@ module.exports = {
         res.prompt();
 
       }).catch(function modelCreatorError(err) {
-        res.red(err);
-        if (app.config.app.debug) {
-          res.red(err.stack);
+        res.red(err.message).ln();
+        /* istanbul ignore if*/
+        if (typeof app.config.app !== "undefined" && app.config.app.debug) {
+          res.red(err.stack.replace(err.message, ''));
+        }
+        /* istanbul ignore if*/
+        if (bug) {
+          bug.captureException(err);
         }
         res.prompt();
       });
