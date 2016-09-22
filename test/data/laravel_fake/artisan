@@ -1,0 +1,262 @@
+#!/usr/bin/env php
+<?php
+if (isset($argv[1])) {
+
+    switch ($argv[1]) {
+        case 'node:config':
+            $data = [
+                "services",
+                "queue",
+                "broadcasting",
+                "database",
+                "session",
+                "auth",
+                "mail",
+                "filesystems",
+                "compile",
+                "view",
+                "app",
+                "cache",
+            ];
+            if (!isset($argv[2])) {
+                echo json_encode($data);
+                return;
+            }
+            $config = [
+                'app'          => [
+                    'env'             => 'testing',
+                    'debug'           => false,
+                    'url'             => 'http://localhost',
+                    'timezone'        => 'UTC',
+                    'locale'          => 'en',
+                    'fallback_locale' => 'en',
+                    'key'             => 'longappkeyfortesting',
+                    'cipher'          => 'AES-256-CBC',
+                    'log_level'       => 'debug',
+                    'providers'       => [
+                        Illuminate\Auth\AuthServiceProvider::class,
+                        Illuminate\Broadcasting\BroadcastServiceProvider::class,
+                        Illuminate\Bus\BusServiceProvider::class,
+                    ],
+                    'aliases'         => [
+
+                        'App'     => Illuminate\Support\Facades\App::class,
+                        'Artisan' => Illuminate\Support\Facades\Artisan::class,
+                        'Auth'    => Illuminate\Support\Facades\Auth::class,
+                    ],
+
+                ],
+                'auth'         => [
+                    'defaults' => [
+                        'guard'     => 'web',
+                        'passwords' => 'users',
+                    ],
+                    'guards'   => [
+                        'web' => [
+                            'driver'   => 'session',
+                            'provider' => 'users',
+                        ],
+
+                        'api' => [
+                            'driver'   => 'token',
+                            'provider' => 'users',
+                        ],
+                    ],
+                ],
+                'providers'    => [
+                    'users' => [
+                        'driver' => 'eloquent',
+                        'model'  => App\User::class,
+                    ],
+
+                    // 'users' => [
+                    //     'driver' => 'database',
+                    //     'table' => 'users',
+                    // ],
+                ],
+                'passwords'    => [
+                    'users' => [
+                        'provider' => 'users',
+                        'email'    => 'auth.emails.password',
+                        'table'    => 'password_resets',
+                        'expire'   => 60,
+                    ],
+                ],
+                'broadcasting' => [
+                    'default'     => 'redis',
+                    'connections' => [
+
+                        'pusher' => [
+                            'driver'  => 'pusher',
+                            'key'     => '',
+                            'secret'  => '',
+                            'app_id'  => '',
+                            'options' => [
+                                //
+                            ],
+                        ],
+
+                        'redis'  => [
+                            'driver'     => 'redis',
+                            'connection' => 'default',
+                        ],
+
+                        'log'    => [
+                            'driver' => 'log',
+                        ],
+
+                    ],
+                ],
+                'database'     => [
+                    'default'     => 'mysql',
+                    'connections' => [
+
+                        'sqlite' => [
+                            'driver'   => 'sqlite',
+                            'database' => '',
+                            'prefix'   => '',
+                        ],
+
+                        'mysql'  => [
+                            'driver'    => 'mysql',
+                            'host'      => 'localhost',
+                            'port'      => '3306',
+                            'database'  => 'testdb',
+                            'username'  => 'testdb',
+                            'password'  => 'testdb',
+                            'charset'   => 'utf8',
+                            'collation' => 'utf8_unicode_ci',
+                            'prefix'    => '',
+                            'strict'    => false,
+                            'engine'    => null,
+                        ],
+
+                        'pgsql'  => [
+                            'driver'   => 'pgsql',
+                            'host'     => 'localhost',
+                            'port'     => '5432',
+                            'database' => 'forge',
+                            'username' => 'forge',
+                            'password' => '',
+                            'charset'  => 'utf8',
+                            'prefix'   => '',
+                            'schema'   => 'public',
+                        ],
+
+                    ],
+                    'redis'       => [
+
+                        'cluster' => false,
+
+                        'default' => [
+                            'host'     => 'localhost',
+                            'password' => null,
+                            'port'     => 6379,
+                            'database' => 0,
+                        ],
+
+                    ],
+                ],
+                'filesystems'  => [
+                    "default" => "local",
+                    "cloud"   => "s3",
+                    "disks"   => [
+                        "local"  => [
+                            "driver" => "local",
+                            "root"   => "/var/www/fakeproject/storage/app",
+                        ],
+                        "public" => [
+                            "driver"     => "local",
+                            "root"       => "/var/www/fakeproject/storage/app/public",
+                            "visibility" => "public",
+                        ],
+
+                    ],
+                ],
+                'mail'         => [
+                    "driver"     => "smtp",
+                    "host"       => "127.0.0.1",
+                    "port"       => "1025",
+                    "from"       => [
+                        "address" => null,
+                        "name"    => null,
+                    ],
+                    "encryption" => null,
+                    "username"   => null,
+                    "password"   => null,
+                    "sendmail"   => "\/usr\/sbin\/sendmail -bs",
+                ],
+                'queue'        => [
+                    "default"     => "sync",
+                    "connections" => [
+                        "sync"       => [
+                            "driver" => "sync",
+                        ],
+                        "database"   => [
+                            "driver" => "database",
+                            "table"  => "jobs",
+                            "queue"  => "default",
+                            "expire" => 90],
+                        "beanstalkd" => [
+                            "driver" => "beanstalkd",
+                            "host"   => "localhost",
+                            "queue"  => "default",
+                            "ttr"    => 90],
+                        "sqs"        => [
+                            "driver" => "sqs",
+                            "key"    => "your-public-key",
+                            "secret" => "your-secret-key",
+                            "prefix" => "https://sqs.us-east-1.amazonaws.com\/your-account-id",
+                            "queue"  => "your-queue-name",
+                            "region" => "us-east-1",
+                        ],
+                        "redis"      => [
+                            "driver"     => "redis",
+                            "connection" => "default",
+                            "queue"      => "default",
+                            "expire"     => 90],
+                        "failed"     => [
+                            "database" => "mysql",
+                            "table"    => "failed_jobs",
+                        ],
+                    ],
+
+                ],
+                'services'     => [
+                    "mailgun"   => [
+                        "domain" => null,
+                        "secret" => null,
+                    ],
+                    "mandrill"  => [
+                        "secret" => null,
+                    ],
+                    "ses"       => [
+                        "key"    => null,
+                        "secret" => null,
+                        "region" => "us-east-1",
+                    ],
+                    "sparkpost" => [
+                        "secret" => null,
+                    ],
+                    "stripe"    => [
+                        "model"  => "App\\User",
+                        "key"    => null,
+                        "secret" => null,
+                    ],
+                ],
+
+            ];
+            if (isset($config[$argv[2]])) {
+                echo json_encode($config[$argv[2]]);
+            }
+
+            break;
+        case '-V':
+            echo 'Laravel Framework version 5.2.43';
+            break;
+
+        default:
+            var_dump($argv);
+            break;
+    }
+}
