@@ -1,0 +1,61 @@
+verbose: false
+instrumentation:
+    root: .
+    extensions:
+        - .js
+    default-excludes: true
+    excludes: 
+        - 'node_modules/**/*'
+        - 'resources/**/*'
+        - 'bootstrap/commands.js'
+        - 'data/**/*'
+        - 'test/**/*'
+    embed-source: true
+    variable: __coverage__
+    compact: true
+    preserve-comments: false
+    complete-copy: false
+    save-baseline: false
+    baseline-file: /var/www/reports/laravel-queue/coverage-baseline.json
+    include-all-sources: true
+    include-pid: false
+    es-modules: false
+reporting:
+    print: lcov
+    reports:
+        - lcov
+        - json
+        - cobertura
+    dir: /var/www/reports/laravel-queue/
+    watermarks:
+        statements: [50, 99]
+        lines: [50, 99]
+        functions: [50, 99]
+        branches: [50, 99]
+    report-config:
+        clover: {file: clover.xml}
+        cobertura: {file: cobertura-coverage.xml}
+        json: {file: coverage-final.json}
+        json-summary: {file: coverage-summary.json}
+        lcovonly: {file: lcov.info}
+        teamcity: {file: null, blockName: Code Coverage Summary}
+        text: {file: null, maxCols: 0}
+        text-lcov: {file: lcov.info}
+        text-summary: {file: null}
+hooks:
+    hook-run-in-context: true
+    post-require-hook: null
+    handle-sigint: false
+check:
+    global:
+        statements: 0
+        lines: 0
+        branches: 0
+        functions: 0
+        excludes: []
+    each:
+        statements: 0
+        lines: 0
+        branches: 0
+        functions: 0
+        excludes: []

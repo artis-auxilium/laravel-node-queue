@@ -1,6 +1,7 @@
 'use strict';
-/* global config,appdir,Promise */
-global.Queue = require('bee-queue');
+/* global config,appdir,Promise,logger */
+var console = logger(config.core.log.prefix + ':missingJob');
+global.Queue = require('../lib/queue');
 var jsBeautify = require('js-beautify').js_beautify;
 var fs = require('fs-promise');
 var each = require('lodash/each');
@@ -11,6 +12,7 @@ var noJob = [];
 var Job;
 
 var getNoJob = function getNoJob(jobs) {
+  console.debug('collect job not created');
   each(jobs, function eachJob(job) {
     if (typeof job !== 'string') {
       getNoJob(job);
@@ -22,11 +24,13 @@ var getNoJob = function getNoJob(jobs) {
 };
 
 var updateLaravelConf = function updateLaravelConf() {
+  console.debug('Update laravel config');
   return new Promise(function sauvConf(resolve, reject) {
     var laravelConfig = config.laravel;
     laravelConfig.addToApp.job = merge.recursive(true, laravelConfig.addToApp.job, config.app.job);
     fs.writeFile(appdir + '/Config/laravel.js', utils.formatConfig(laravelConfig))
       .then(function sauvOk() {
+        console.debug('config updated');
         resolve('config updated');
       })
       .catch(reject);
@@ -70,6 +74,7 @@ var createJob = function createJob(jobName) {
   jobFile += "module.exports.add = add;\n";
 
   return new Promise(function writeJob(resolve, reject) {
+    console.debug('write job ', jobName);
     fs.writeFile(appdir + '/Jobs/' + jobName + '.js', jsBeautify(jobFile))
       .then(function jobCreated() {
         resolve(jobName + ' created');
@@ -87,8 +92,8 @@ module.exports = {
       res.yellow('see manual for setup config from laravel').ln();
       return res.prompt();
     }
-    if (Object.keys(config.app.job).length === 0) {
-      res.yellow('no job in Config/app.js');
+    if (!config.app.job || Object.keys(config.app.job).length === 0) {
+      res.yellow('no job in Config/app.js').ln();
       return res.prompt();
     }
     global.queueOption = {};
@@ -107,13 +112,13 @@ module.exports = {
         return toWrite;
       }).then(function writeJobs(write) {
         Promise.all(write).then(function allWriteOk(result) {
+          console.debug('All write ok');
           utils.displayMessage(result, res);
           res.prompt();
+          // res.prompt();
         });
-      }).catch(function allWriteKo(err) {
-        console.log(err);
-        console.trace(err);
-        res.prompt();
+      }).catch(function catchError(error) {
+        utils.displayError(error, res);
       });
 
   }

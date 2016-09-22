@@ -3,6 +3,7 @@
 
 var jsBeautify = require('js-beautify').js_beautify;
 var fs = require('fs-promise');
+var utils = require('../lib/utilsCmd');
 
 var createCommand = function createCommand(cmdName) {
   return new Promise(function promiseCreateCommand(resolve, reject) {
@@ -25,7 +26,7 @@ var createCommand = function createCommand(cmdName) {
 };
 
 module.exports = {
-  pattern: 'make-commande :command_name',
+  pattern: 'make-command :command_name',
   help: 'Make a commande file',
   function: function run(req, res) {
     createCommand(req.params.command_name)
@@ -34,8 +35,8 @@ module.exports = {
         res.prompt();
 
       })
-      .catch(function catchError(err) {
-        console.log(err);
+      .catch(function catchError(error) {
+        utils.displayError(error, res);
       });
   }
 };

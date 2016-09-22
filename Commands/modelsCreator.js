@@ -2,6 +2,7 @@
 /* global app */
 /* eslint global-require: 0 */
 var utils = require('../lib/utilsCmd');
+
 module.exports = {
   pattern: 'model-creator',
   help: 'Create model from database',
@@ -16,12 +17,8 @@ module.exports = {
         utils.displayMessage(result, res);
         res.prompt();
 
-      }).catch(function modelCreatorError(err) {
-        res.red(err);
-        if (app.config.app.debug) {
-          res.red(err.stack);
-        }
-        res.prompt();
+      }).catch(function catchError(error) {
+        utils.displayError(error, res);
       });
 
   }

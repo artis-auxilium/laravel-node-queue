@@ -168,9 +168,8 @@ module.exports = {
 
       })
 
-    .catch(function catchError(err) {
-      console.log(err);
-      res.prompt();
+    .catch(function catchError(error) {
+      utils.displayError(error, res);
     });
 
   }
