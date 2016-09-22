@@ -1,10 +1,7 @@
 'use strict';
 /* global app,appdir*/
-/* eslint global-require :0 */
-// var path = require('path');
-// global.appdir = path.resolve(__dirname, './../data/app_fake');
-// var each = require('lodash/each');
-// require('../../bootstrap');
+/* eslint global-require: 0 */
+
 var rewire = require('rewire');
 var bddStdin = require('../lib/bdd-stdin');
 var shell = require('../../lib/shell');

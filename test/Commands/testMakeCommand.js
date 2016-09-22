@@ -1,5 +1,5 @@
 'use strict';
-/* eslint global-require :0 */
+/* eslint global-require: 0 */
 /* global app,appdir*/
 
 var rewire = require('rewire');

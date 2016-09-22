@@ -1,5 +1,5 @@
 'use strict';
-/* eslint global-require :0*/
+/* eslint global-require: 0 */
 var path = require('path');
 var jsdiff = require('diff');
 var colors = require('colors');

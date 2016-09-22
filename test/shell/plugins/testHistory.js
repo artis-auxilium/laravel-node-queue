@@ -1,6 +1,5 @@
 'use strict';
 /* global app,appdir*/
-/* eslint global-require :0*/
 
 var rewire = require('rewire');
 var bddStdin = require('../../lib/bdd-stdin');
