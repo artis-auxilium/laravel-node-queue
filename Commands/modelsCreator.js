@@ -1,5 +1,5 @@
 'use strict';
-/* global app,bug */
+/* global app */
 /* eslint global-require: 0 */
 var utils = require('../lib/utilsCmd');
 
@@ -17,17 +17,8 @@ module.exports = {
         utils.displayMessage(result, res);
         res.prompt();
 
-      }).catch(function modelCreatorError(err) {
-        res.red(err.message).ln();
-        /* istanbul ignore if*/
-        if (typeof app.config.app !== "undefined" && app.config.app.debug) {
-          res.red(err.stack.replace(err.message, ''));
-        }
-        /* istanbul ignore if*/
-        if (bug) {
-          bug.captureException(err);
-        }
-        res.prompt();
+      }).catch(function catchError(error) {
+        utils.displayError(error, res);
       });
 
   }

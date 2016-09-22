@@ -1,5 +1,5 @@
 'use strict';
-/* global config,appdir,Promise,logger,app,bug */
+/* global config,appdir,Promise,logger */
 var console = logger(config.core.log.prefix + ':missingJob');
 global.Queue = require('../lib/queue');
 var jsBeautify = require('js-beautify').js_beautify;
@@ -117,17 +117,8 @@ module.exports = {
           res.prompt();
           // res.prompt();
         });
-      }).catch(function allWriteKo(err) {
-        res.red(err.message).ln();
-        /* istanbul ignore if*/
-        if (typeof app.config.app !== "undefined" && app.config.app.debug) {
-          res.red(err.stack.replace(err.message, ''));
-        }
-        /* istanbul ignore if*/
-        if (bug) {
-          bug.captureException(err);
-        }
-        res.prompt();
+      }).catch(function catchError(error) {
+        utils.displayError(error, res);
       });
 
   }

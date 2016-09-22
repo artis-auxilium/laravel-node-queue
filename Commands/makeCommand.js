@@ -1,8 +1,9 @@
 'use strict';
-/* global app,appdir,Promise,bug */
+/* global appdir,Promise */
 
 var jsBeautify = require('js-beautify').js_beautify;
 var fs = require('fs-promise');
+var utils = require('../lib/utilsCmd');
 
 var createCommand = function createCommand(cmdName) {
   return new Promise(function promiseCreateCommand(resolve, reject) {
@@ -34,17 +35,8 @@ module.exports = {
         res.prompt();
 
       })
-      .catch(function catchError(err) {
-        res.red(err.message).ln();
-        /* istanbul ignore if*/
-        if (typeof app.config.app !== "undefined" && app.config.app.debug) {
-          res.red(err.stack.replace(err.message, ''));
-        }
-        /* istanbul ignore if*/
-        if (bug) {
-          bug.captureException(err);
-        }
-        res.prompt();
+      .catch(function catchError(error) {
+        utils.displayError(error, res);
       });
   }
 };
