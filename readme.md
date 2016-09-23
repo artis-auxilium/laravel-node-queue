@@ -1,6 +1,5 @@
-[![Code Climate](https://codeclimate.com/github/icfr/laravel-node-queue/badges/gpa.svg)](https://codeclimate.com/github/icfr/laravel-node-queue)
-[![Test Coverage](https://codeclimate.com/github/icfr/laravel-node-queue/badges/coverage.svg)](https://codeclimate.com/github/icfr/laravel-node-queue/coverage)
-[![Issue Count](https://codeclimate.com/github/icfr/laravel-node-queue/badges/issue_count.svg)](https://codeclimate.com/github/icfr/laravel-node-queue)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/28289bb4d19c43d6857a40f8826c61a1)](https://www.codacy.com/app/icfr-eirl/laravel-node-queue?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=icfr/laravel-node-queue&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/28289bb4d19c43d6857a40f8826c61a1)](https://www.codacy.com/app/icfr-eirl/laravel-node-queue?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=icfr/laravel-node-queue&amp;utm_campaign=Badge_Coverage)
 
 # node server for Laravel queue
 
