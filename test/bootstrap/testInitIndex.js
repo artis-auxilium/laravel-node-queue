@@ -15,7 +15,7 @@ module.exports = {
     config.database = null;
 
     test.throws(function throwIndexError() {
-      require('../../bootstrap/app');
+      require('../..');
     }, Error, 'did you have run ./artisan laravel-config ?');
     test.done();
   }
