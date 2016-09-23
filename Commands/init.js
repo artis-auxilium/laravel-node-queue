@@ -124,12 +124,7 @@ var cmd = function cmd(command) {
       if (stderr) {
         return reject(stderr);
       }
-      try {
-        return resolve(stdout);
-
-      } catch (error) {
-        return reject(error);
-      }
+      return resolve(stdout);
     });
 
   });
@@ -137,7 +132,7 @@ var cmd = function cmd(command) {
 
 module.exports = {
   pattern: 'init',
-  help: 'install all required tool needed and run initial imports',
+  help: 'Install all required tool needed and run initial imports',
   function: function handle(req, res) {
     request = req;
     response = res;
@@ -163,7 +158,7 @@ module.exports = {
         req.question('when done type enter', function tapeEnter() {
           req.shell.isShell = false;
           app.config.laravel.path = laravelPath;
-          req.shell.run('laravel-config');
+          req.shell.run('laravel:config');
         })
 
       })
