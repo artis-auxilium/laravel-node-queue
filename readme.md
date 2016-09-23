@@ -43,7 +43,7 @@ dont forget to change namespace of the class
 Import laravel config
 
 ```
-./artisan laravel-config
+./artisan laravel:config
 ```
 
 It ask which config to import and show you setting to put
@@ -54,7 +54,7 @@ you can import model from database
 add model to import in Config/core.js and run
 
 ```
-./artisan model-creator
+./artisan make:models
 ```
 
 #### Example laravel event
@@ -120,7 +120,7 @@ app: {
 then run this for create job
 
 ```
-./artisan missing-job
+./artisan make:job
 ```
 
 look at Jobs folder to test job, data is stored in job.data.

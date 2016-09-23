@@ -21,15 +21,9 @@ module.exports = {
     prefix: 'laravel-queue'
   },
   modelsCreator: {
-    models: [],
+    models: ['User'],
     modelsFolder: 'Models',
-    define: {
-      "paranoid": true,
-      "timestamps": true,
-      "createdAt": "created_at",
-      "updatedAt": "updated_at",
-      "deletedAt": "deleted_at"
-    }
+    define: {}
   },
   langs: {
     locales: ['en', 'fr'],

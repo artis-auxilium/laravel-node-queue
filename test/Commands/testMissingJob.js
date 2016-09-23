@@ -11,10 +11,10 @@ var intercept = require('intercept-stdout');
 module.exports = {
   'test Missing Job': function testMissingJob(test) {
     var stdout = [];
-    process.argv = ['node', appdir + '/artisan', 'missing-job'];
+    process.argv = ['node', appdir + '/artisan', 'make:job'];
     bddStdin('');
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt);
+      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       // return '';
     });
     global.app = new shell({
@@ -33,7 +33,7 @@ module.exports = {
     app.cmd(missingJob.pattern, missingJob.help, missingJob.function);
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
-      console.log(stdout);
+      test.ok(stdout.indexOf('example created') > -1);
       test.done();
     }
   }

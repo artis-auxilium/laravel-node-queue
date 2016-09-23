@@ -28,10 +28,10 @@ reporting:
         - cobertura
     dir: /var/www/reports/laravel-queue/
     watermarks:
-        statements: [50, 99]
-        lines: [50, 99]
-        functions: [50, 99]
-        branches: [50, 99]
+        statements: [50, 85]
+        lines: [50, 85]
+        functions: [50, 85]
+        branches: [50, 85]
     report-config:
         clover: {file: clover.xml}
         cobertura: {file: cobertura-coverage.xml}

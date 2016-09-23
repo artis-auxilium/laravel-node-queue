@@ -4,7 +4,7 @@
 var utils = require('../lib/utilsCmd');
 
 module.exports = {
-  pattern: 'model-creator',
+  pattern: 'make:models',
   help: 'Create model from database',
   function: function run(req, res) {
     if (app.config.core.modelsCreator.models.length === 0) {

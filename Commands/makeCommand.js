@@ -26,7 +26,7 @@ var createCommand = function createCommand(cmdName) {
 };
 
 module.exports = {
-  pattern: 'make-command :command_name',
+  pattern: 'make:command {command_name}',
   help: 'Make a commande file',
   function: function run(req, res) {
     createCommand(req.params.command_name)

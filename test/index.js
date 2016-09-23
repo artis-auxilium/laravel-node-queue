@@ -3,19 +3,21 @@
 var path = require('path');
 var jsdiff = require('diff');
 var colors = require('colors');
-global.appdir = path.resolve(__dirname, './data/app_fake');
+global.appdir = path.resolve(__dirname, '../data/base');
 var each = require('lodash/each');
 require('../bootstrap');
+process.setMaxListeners(0);
 
 module.exports = {
-  'test send mail': require('./lib/testSendMail'),
   'test history plugins': require('./shell/plugins/testHistory'),
   'test help plugins': require('./shell/plugins/testHelp'),
   'test init': require('./Commands/testInit'),
   'test models creator': require('./Commands/testModelsCreator'),
   'test make command': require('./Commands/testMakeCommand'),
   'test init database': require('./bootstrap/testInitDatabase'),
-  'test Missing Job': require('./Commands/testMissingJob')
+  'test Missing Job': require('./Commands/testMissingJob'),
+  'test send mail': require('./lib/testSendMail'),
+  'test index':require('./bootstrap/testInitIndex')
 }
 
 global.getDiff = function getDiff(base, other) {

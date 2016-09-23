@@ -190,7 +190,7 @@ var nodeConfig = function nodeConfig() {
 };
 
 module.exports = {
-  pattern: 'laravel-config',
+  pattern: 'laravel:config',
   help: 'Get config from laravel',
   function: function run(req, res) {
     request = req;
