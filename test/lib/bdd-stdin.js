@@ -33,7 +33,7 @@ var bddStdin = function bddStdin(responses) {
       if (key < responses.length) {
         sendAnswer();
       }
-    }, 1000);
+    }, 200);
   }
 
   sendAnswer();
@@ -43,7 +43,8 @@ bddStdin.keys = Object.freeze({
   up: '\u001b[A',
   down: '\u001b[B',
   left: '\u001b[D',
-  right: '\u001b[C'
+  right: '\u001b[C',
+  delete: '\u0008'
 });
 
 module.exports = bddStdin;

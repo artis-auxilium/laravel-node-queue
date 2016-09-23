@@ -7,14 +7,14 @@ var Redis = require('ioredis');
 var console = logger(config.core.log.prefix + ':app');
 global.Queue = require('bee-queue');
 var includeAll = require('include-all');
-
-var Eval = function Eval(str) {
+/* istanbul ignore next */
+var getJob = function Eval(str) {
   //disable jshint error
   var evil = eval;
   var cleanStr = str.replace(/;|\(|\)|{|}/gi, '');
   return evil(cleanStr);
 };
-
+/* istanbul ignore if */
 if (config.database) {
   global.queueOption = {
     prefix: config.core.queue.prefix,
@@ -30,7 +30,7 @@ if (config.database) {
     message = JSON.parse(message);
     var jobTodo;
     try {
-      jobTodo = Eval('config.app.job.' + message.event);
+      jobTodo = getJob('config.app.job.' + message.event);
     } catch (err) {
       jobTodo = null;
     }
