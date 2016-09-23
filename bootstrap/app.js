@@ -40,7 +40,7 @@ if (config.database) {
       return;
     }
     console.log('add job for ' + message.event);
-    job[jobTodo].add(message.data.data);
+    job[jobTodo].add(message.data);
   });
 } else {
   throw new Error('did you have run ./artisan laravel-config ?');
