@@ -11,7 +11,7 @@ module.exports = {
   'test make command': function testMakeCommand(test) {
     var stdout = [];
     bddStdin('');
-    process.argv = ['node', appdir + '/artisan', 'make-command command'];
+    process.argv = ['node', appdir + '/artisan', 'make:command command'];
     var unhookIntercept = intercept(function onIntercept(txt) {
       stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
     });
@@ -37,7 +37,7 @@ module.exports = {
   'test make command fail': function testMakeCommandFail(test) {
     var stdout = [];
     bddStdin('');
-    process.argv = ['node', appdir + '/artisan', 'make-command command'];
+    process.argv = ['node', appdir + '/artisan', 'make:command command'];
     var fsMock = {
       writeFile: function writeFile() {
         return Promise.reject(new Error('file not writable'));

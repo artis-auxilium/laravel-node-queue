@@ -84,8 +84,8 @@ var createJob = function createJob(jobName) {
 };
 
 module.exports = {
-  pattern: 'missing-job',
-  help: 'make missing job',
+  pattern: 'make:job {jobName?}',
+  help: 'Make missing job',
   function: function run(req, res) {
     if (!config.app) {
       res.red('app config missing').ln();
