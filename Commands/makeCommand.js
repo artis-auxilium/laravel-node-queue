@@ -20,7 +20,7 @@ var createCommand = function createCommand(cmdName) {
         resolve(cmdName + ' created');
       })
       .catch(function writeErr(err) {
-        reject(err)
+        reject(err);
       });
   });
 };

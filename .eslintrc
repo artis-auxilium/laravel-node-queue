@@ -65,7 +65,7 @@ rules:
   no-floating-decimal: 2
   no-implicit-coercion: 2
   no-implied-eval: 2
-  no-invalid-this: 1
+  no-invalid-this: 2
   no-iterator: 2
   no-labels: 2
   no-lone-blocks: 2
@@ -148,8 +148,8 @@ rules:
   max-nested-callbacks: [2,4]
   max-params: 0
   max-statements: [2, 35]
-  new-cap: 0
-  new-parens: 0
+  new-cap: 2
+  new-parens: 2
   newline-after-var: 0
   no-array-constructor: 2
   no-bitwise: 2
@@ -177,9 +177,9 @@ rules:
   quotes: 0
   require-jsdoc: 0
   semi-spacing: 0
-  semi: 0
+  semi: 2
   sort-vars: 0
-  space-after-keywords: 0
+  keyword-spacing: 2
   space-before-blocks: 0
   space-before-function-paren: 0
   space-before-keywords: 0
