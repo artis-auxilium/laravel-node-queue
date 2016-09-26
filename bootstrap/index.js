@@ -2,7 +2,7 @@
 /* global app,appdir,bug */
 var raven = require('raven');
 var defaults = require('lodash/defaults');
-var Config = require('./config');
+var Config = require('../lib/Config');
 
 app.logger = require('debug-logger');
 app.config = new Config(appdir);
@@ -49,5 +49,5 @@ if (process.env.NODE_ENV !== "development" && app.config('services.raven', false
 } else {
   global.bug = false;
 }
-require('./database.js');
+require('../lib/db');
 

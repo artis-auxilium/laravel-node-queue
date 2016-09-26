@@ -7,7 +7,7 @@ Object.keys(require.cache).forEach(function eachRequireKey(key) {
 var path = require('path');
 
 global.appdir = path.resolve(__dirname, '../../data/base');
-var Config = require('../../bootstrap/config');
+var Config = require('../../lib/Config');
 var debugLogger = require('debug-logger');
 
 module.exports = {

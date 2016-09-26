@@ -8,7 +8,7 @@ var Shell = require('../../lib/shell');
 var intercept = require('intercept-stdout');
 var modelsCreator = require('../../Commands/modelsCreator');
 var each = require('lodash/each');
-var Config = require('../../bootstrap/config');
+var Config = require('../../lib/Config');
 var debugLogger = require('debug-logger');
 var database, core, bddStdin;
 module.exports = {
@@ -43,7 +43,7 @@ module.exports = {
       chdir: appdir + '/'
     });
 
-    rewire('../../bootstrap/database');
+    rewire('../../lib/db');
 
     app.on('error', function appError() {
       unhookIntercept();
@@ -74,7 +74,7 @@ module.exports = {
       chdir: appdir + '/'
     });
     app.config().set('core.modelsCreator.modelsFolder', 'ModelsNew');
-    rewire('../../bootstrap/database');
+    rewire('../../lib/db');
     app.on('error', function appError() {
       unhookIntercept();
     });
@@ -106,7 +106,7 @@ module.exports = {
       chdir: appdir + '/'
     });
     app.config().set('core.modelsCreator.models', []);
-    rewire('../../bootstrap/database');
+    rewire('../../lib/db');
     app.on('error', function appError() {
       unhookIntercept();
     });
@@ -148,7 +148,7 @@ module.exports = {
       chdir: appdir + '/'
     });
     app.config().set('database', null);
-    rewire('../../bootstrap/database');
+    rewire('../../lib/db');
     app.on('error', function appError() {
       unhookIntercept();
     });
@@ -190,7 +190,7 @@ module.exports = {
       chdir: appdir + '/'
     });
     app.config().set('database.connections.database', 'notexist');
-    rewire('../../bootstrap/database');
+    rewire('../../lib/db');
     app.on('error', function appError() {
       unhookIntercept();
     });
