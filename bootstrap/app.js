@@ -1,48 +1,43 @@
 'use strict';
-/* global logger,appdir,config,job */
-/* eslint no-eval: 0 */
 
+/* global app,appdir */
+
+global.app = {};
 require('.');
 var Redis = require('ioredis');
-var console = logger(config.core.log.prefix + ':app');
-global.Queue = require('bee-queue');
+var logPrefix = app.config('core.log.prefix');
+var console = app.logger(logPrefix + ':app');
 var includeAll = require('include-all');
-/* istanbul ignore next */
-var getJob = function Eval(str) {
-  //disable jshint error
-  var evil = eval;
-  var cleanStr = str.replace(/;|\(|\)|{|}/gi, '');
-  return evil(cleanStr);
+
+global.Queue = require('bee-queue');
+
+module.exports = function startApp() {
+  if (app.config('database')) {
+    app.queueOption = {
+      prefix: app.config('core.queue.prefix'),
+      redis: app.config('database.redis')
+    };
+    app.job = includeAll({
+      dirname: appdir + '/Jobs',
+      filter: /(.+)\.js$/
+    });
+    var redis = new Redis(app.config('database.redis'));
+
+    redis.subscribe(app.config('broadcasting.channel') || 'laravel-channel');
+    redis.on('message', function redisMessage(channel, message) {
+      message = JSON.parse(message);
+      var jobTodo = app.config('app.job.' + message.event);
+
+      if (!jobTodo || !app.job[jobTodo]) {
+        console.info('no job for ' + message.event);
+        console.info(message.data);
+        return;
+      }
+      console.log('add job for ' + message.event);
+      app.job[jobTodo].add(message.data);
+    });
+  } else {
+    throw new Error('did you have run ./artisan laravel:config ?');
+  }
 };
-/* istanbul ignore if */
-if (config.database) {
-  global.queueOption = {
-    prefix: config.core.queue.prefix,
-    redis: config.database.redis
-  };
-  global.job = includeAll({
-    dirname: appdir + '/Jobs',
-    filter: /(.+)\.js$/
-  });
-  var redis = new Redis(config.database.redis);
-  redis.subscribe(config.broadcasting.channel || 'laravel-channel');
-  redis.on('message', function redisMessage(channel, message) {
-    message = JSON.parse(message);
-    var jobTodo;
-    try {
-      jobTodo = getJob('config.app.job.' + message.event);
-    } catch (err) {
-      jobTodo = null;
-    }
-    if (!jobTodo || !job[jobTodo]) {
-      console.info('no job for ' + message.event);
-      console.info(message.data);
-      return;
-    }
-    console.log('add job for ' + message.event);
-    job[jobTodo].add(message.data);
-  });
-} else {
-  throw new Error('did you have run ./artisan laravel-config ?');
-}
 

@@ -1,2 +1,2 @@
 'use strict';
-require('./bootstrap/app');
+require('./bootstrap/app')();
