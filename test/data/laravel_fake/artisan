@@ -9,6 +9,7 @@ if (isset($argv[1])) {
                 "queue",
                 "broadcasting",
                 "database",
+                "example",
                 "session",
                 "auth",
                 "mail",
@@ -25,7 +26,7 @@ if (isset($argv[1])) {
             $config = [
                 'app'          => [
                     'env'             => 'testing',
-                    'debug'           => false,
+                    'debug'           => true,
                     'url'             => 'http://localhost',
                     'timezone'        => 'UTC',
                     'locale'          => 'en',
@@ -107,6 +108,9 @@ if (isset($argv[1])) {
 
                     ],
                 ],
+                'cache'        => [
+                    'cache' => 'test',
+                ],
                 'database'     => [
                     'default'     => 'mysql',
                     'connections' => [
@@ -156,6 +160,9 @@ if (isset($argv[1])) {
                         ],
 
                     ],
+                ],
+                'example'      => [
+                    'testing' => 'testing',
                 ],
                 'filesystems'  => [
                     "default" => "local",
@@ -243,6 +250,20 @@ if (isset($argv[1])) {
                         "key"    => null,
                         "secret" => null,
                     ],
+                ],
+                'session'      => [
+                    'driver'          => 'redis',
+                    'lifetime'        => 120,
+                    'expire_on_close' => false,
+                    'encrypt'         => false,
+                    'files'           => 'framework/sessions',
+                    'connection'      => 'default',
+                    'table'           => 'sessions',
+                    'lottery'         => [2, 100],
+                    'cookie'          => 'PHPSESSION',
+                    'path'            => '/',
+                    'domain'          => null,
+                    'secure'          => false,
                 ],
 
             ];

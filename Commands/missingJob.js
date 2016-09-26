@@ -1,6 +1,6 @@
 'use strict';
-/* global config,appdir,Promise,logger */
-var console = logger(config.core.log.prefix + ':missingJob');
+/* global app,appdir,Promise */
+
 global.Queue = require('../lib/queue');
 var jsBeautify = require('js-beautify').js_beautify;
 var fs = require('fs-promise');
@@ -9,7 +9,7 @@ var merge = require('merge');
 var utils = require('../lib/utilsCmd');
 var includeAll = require('include-all');
 var noJob = [];
-var Job;
+var Job, console;
 
 var getNoJob = function getNoJob(jobs) {
   console.debug('collect job not created');
@@ -26,8 +26,8 @@ var getNoJob = function getNoJob(jobs) {
 var updateLaravelConf = function updateLaravelConf() {
   console.debug('Update laravel config');
   return new Promise(function sauvConf(resolve, reject) {
-    var laravelConfig = config.laravel;
-    laravelConfig.addToApp.job = merge.recursive(true, laravelConfig.addToApp.job, config.app.job);
+    var laravelConfig = app.config('laravel');
+    laravelConfig.addToApp.job = merge.recursive(true, laravelConfig.addToApp.job, app.config('app.job'));
     fs.writeFile(appdir + '/Config/laravel.js', utils.formatConfig(laravelConfig))
       .then(function sauvOk() {
         console.debug('config updated');
@@ -40,8 +40,8 @@ var updateLaravelConf = function updateLaravelConf() {
 };
 
 var createJob = function createJob(jobName) {
-  var jobFile = "var queue = new Queue('" + jobName + "',queueOption);\n";
-  jobFile += "var console = logger('" + config.core.log.prefix + ":" + jobName + "');\n";
+  var jobFile = "var queue = new Queue('" + jobName + "',app.queueOption);\n";
+  jobFile += "var console = app.logger('" + app.config('core.log.prefix') + ":" + jobName + "');\n";
   jobFile += "var reportResult = function(jobId, result) {\n";
   jobFile += "if (result){\n";
   jobFile += "console.info('Result " + jobName + ": ' + result);\n";
@@ -87,12 +87,13 @@ module.exports = {
   pattern: 'make:job {jobName?}',
   help: 'Make missing job',
   function: function run(req, res) {
-    if (!config.app) {
+    console = app.logger(app.config('core.log.prefix') + ':makeJob');
+    if (!app.config('app')) {
       res.red('app config missing').ln();
       res.yellow('see manual for setup config from laravel').ln();
       return res.prompt();
     }
-    if (!config.app.job || Object.keys(config.app.job).length === 0) {
+    if (Object.keys(app.config('app.job', [])).length === 0) {
       res.yellow('no job in Config/app.js').ln();
       return res.prompt();
     }
@@ -105,7 +106,7 @@ module.exports = {
 
     updateLaravelConf()
       .then(function collectJob() {
-        getNoJob(config.app.job);
+        getNoJob(app.config('app.job'));
         each(noJob, function eachNoJOb(job) {
           toWrite.push(createJob(job));
         });

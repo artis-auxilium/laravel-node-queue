@@ -7,7 +7,6 @@ Object.keys(require.cache).forEach(function eachRequireKey(key) {
 var path = require('path');
 
 global.appdir = path.resolve(__dirname, '../../data/base');
-var rewire = require('rewire');
 var Config = require('../../lib/Config');
 var debugLogger = require('debug-logger');
 
@@ -22,19 +21,22 @@ module.exports = {
   tearDown: function tearDown(callback) {
     callback();
   },
-  'test logging option': function testLoggingOption(test) {
+  'test create key': function testCreateKey(test) {
     test.expect(1);
-    app.config().set('database.connections.options.logging', true);
-    rewire('../../lib/db');
-    test.equal('function', typeof app.db.options.logging, 'logger is not function');
+    app.config().set('key.to.create', true);
+    test.ok(app.config('key.to.create'), 'create missing key');
     test.done();
   },
-  'test without config connexion ': function testNoconnexionOption(test) {
-    test.expect(2);
-    app.config().set('database', null);
-    rewire('../../lib/db');
-    test.equal('undefined', typeof app.db, 'db not loaded');
-    test.equal('undefined', typeof app.models, 'no models found');
+  'test env': function testEnv(test) {
+    test.expect(1);
+    process.env.testing = 'testing';
+    test.equal(app.config().env('testing'), 'testing', 'env not match');
+    process.env.testing = null;
+    test.done();
+  },
+  'test env default': function testEnvDefault(test) {
+    test.expect(1);
+    test.equal(app.config().env('wiilNotExist', 'default'), 'default', 'env not match');
     test.done();
   }
 

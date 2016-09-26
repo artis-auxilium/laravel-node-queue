@@ -1,28 +1,48 @@
 'use strict';
-/* global testRenderer,getDiff,appdir,config */
+/* global app,getDiff,appdir */
 /* eslint no-magic-numbers:0 */
-var Mail = require('../../lib/Mail');
-var ECT = require('ect');
-global.testRenderer = ECT({
-  root: appdir + '/resources/views/',
-  ext: '.ect'
-});
+
+var rewire = require('rewire');
+var Mail = rewire('../../lib/Mail');
+var ect = require('ect');
+
+var testRenderer;
 
 module.exports = {
+  setUp: function setUp(callback) {
+    rewire('../utils/bootstrap');
+    testRenderer = ect({
+      root: appdir + '/resources/views/',
+      ext: '.ect'
+    });
+    callback();
+  },
+  tearDown: function tearDown(callback) {
+    callback();
+  },
   'test SendMail Ok': function testSendMailOk(test) {
     test.expect(3);
     var email = 'test@exemple.com';
     var dataMail = {};
-    var mail = new Mail(email, 'test subject', dataMail, 'example');
     var mailTemplate = 'templates/example.ect';
     var html = testRenderer.render(mailTemplate, dataMail);
-    global.mailer = {
+    var mailer = {
       sendMail: function sendMail(opt, cb) {
         test.equal(html, opt.html, 'render not equal');
         test.equal(email, opt.to, 'email not match');
         return cb(null, 'ok');
       }
     };
+    var nodemailer = {
+      createTransport: function createTransport() {
+        return mailer;
+      }
+    };
+
+    Mail.__set__({
+      nodemailer: nodemailer
+    });
+    var mail = new Mail(email, 'test subject', dataMail, 'example');
     mail.send()
       .then(function mailSuccess(res) {
         test.equal(res, 'ok');
@@ -36,17 +56,25 @@ module.exports = {
     test.expect(3);
     var email = 'test@exemple.com';
     var dataMail = {};
-    var mail = new Mail(email, 'test subject', dataMail, 'example');
     var mailTemplate = 'templates/example.ect';
     var html = testRenderer.render(mailTemplate, dataMail);
-    global.mailer = {
+    var mailer = {
       sendMail: function sendMail(opt, cb) {
         test.equal(html, opt.html, 'render not equal');
         test.equal(email, opt.to, 'email not match');
         return cb(new Error('pas ok'));
       }
     };
+    var nodemailer = {
+      createTransport: function createTransport() {
+        return mailer;
+      }
+    };
 
+    Mail.__set__({
+      nodemailer: nodemailer
+    });
+    var mail = new Mail(email, 'test subject', dataMail, 'example');
     mail.send()
       .then(function mailSuccess() {
         test.done();
@@ -60,16 +88,25 @@ module.exports = {
     test.expect(3);
     var email = 'test@exemple.com';
     var dataMail = {};
-    var mail = new Mail(email, 'test subject', dataMail, 'example');
     var mailTemplate = 'templates/example.ect';
     var html = testRenderer.render(mailTemplate, dataMail);
-    global.mailer = {
+    var mailer = {
       sendMail: function sendMail(opt, cb) {
         test.equal(html, opt.html, 'render not equal');
         test.equal(email, opt.to, 'email not match');
         return cb(null, 'ok');
       }
     };
+    var nodemailer = {
+      createTransport: function createTransport() {
+        return mailer;
+      }
+    };
+
+    Mail.__set__({
+      nodemailer: nodemailer
+    });
+    var mail = new Mail(email, 'test subject', dataMail, 'example');
     mail.send(function mailSend(err, info) {
       if (err) {
         test.ok(false, 'no error');
@@ -83,10 +120,10 @@ module.exports = {
     test.expect(3);
     var email = 'test@exemple.com';
     var dataMail = {};
-    var mail = new Mail(email, 'test subject', dataMail, 'example');
+
     var mailTemplate = 'templates/example.ect';
     var html = testRenderer.render(mailTemplate, dataMail);
-    global.mailer = {
+    var mailer = {
       sendMail: function sendMail(opt, cb) {
         test.equal(html, opt.html, 'render not equal' + getDiff(html, opt.html));
         test.equal(email, opt.to, 'email not match');
@@ -94,6 +131,16 @@ module.exports = {
       }
     };
 
+    var nodemailer = {
+      createTransport: function createTransport() {
+        return mailer;
+      }
+    };
+
+    Mail.__set__({
+      nodemailer: nodemailer
+    });
+    var mail = new Mail(email, 'test subject', dataMail, 'example');
     mail.send(function mailSend(err) {
 
       test.deepEqual(new Error('pas ok'), err, 'error not equal');
@@ -110,10 +157,9 @@ module.exports = {
         content: 'hello world!'
       }]
     };
-    var mail = new Mail(email, 'test subject', dataMail, 'example', options);
     var mailTemplate = 'templates/example.ect';
     var html = testRenderer.render(mailTemplate, dataMail);
-    global.mailer = {
+    var mailer = {
       sendMail: function sendMail(opt, cb) {
         test.equal(html, opt.html, 'render not equal');
         test.equal(email, opt.to, 'email not match');
@@ -121,6 +167,16 @@ module.exports = {
         return cb(null, 'ok');
       }
     };
+    var nodemailer = {
+      createTransport: function createTransport() {
+        return mailer;
+      }
+    };
+
+    Mail.__set__({
+      nodemailer: nodemailer
+    });
+    var mail = new Mail(email, 'test subject', dataMail, 'example', options);
     mail.send()
       .then(function mailSuccess() {
         test.done();
@@ -131,7 +187,7 @@ module.exports = {
   },
   'test SendMail No Config': function testSendMailNoConfig(test) {
     test.expect(1);
-    config.mail = null;
+    app.config().set('mail', {});
     var mail;
     test.throws(function throwMailError() {
       mail = new Mail();

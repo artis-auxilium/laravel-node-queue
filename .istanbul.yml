@@ -6,8 +6,8 @@ instrumentation:
     default-excludes: true
     excludes: 
         - 'node_modules/**/*'
+        - 'index.js'
         - 'resources/**/*'
-        - 'bootstrap/commands.js'
         - 'data/**/*'
         - 'test/**/*'
     embed-source: true
