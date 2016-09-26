@@ -1,7 +1,8 @@
 'use strict';
-/*global logger,config,Sequelize,Models,appdir,db */
-var console = logger(config.core.log.prefix + ':db');
+/*global app,Sequelize,appdir */
+// TODO: move to lib
 global.Sequelize = require('sequelize');
+var console = app.logger(app.config('core.log.prefix') + ':db');
 var each = require('lodash/each');
 var includeAll = require('include-all');
 
@@ -13,29 +14,29 @@ var setAssociation = function setAssociation(modelDef, modelName) {
   }
 };
 
-if (typeof config.database !== "undefined") {
-  if (config.database.connections.options.logging) {
-    config.database.connections.options.logging = console.debug;
+if (app.config('database')) {
+  if (app.config('database.connections.options.logging')) {
+    app.config().set('database.connections.options.logging', console.debug);
     console.log('query debug');
   }
 
-  global.db = new Sequelize(
-    config.database.connections.database,
-    config.database.connections.username,
-    config.database.connections.password,
-    config.database.connections.options
+  app.db = new Sequelize(
+    app.config('database.connections.database'),
+    app.config('database.connections.username'),
+    app.config('database.connections.password'),
+    app.config('database.connections.options')
   );
 
-  global.Models = includeAll({
+  app.models = includeAll({
     dirname: appdir + '/Models',
     filter: /(.+)\.js$/
   });
 
-  each(Models, function eachModels(modelDef, modelName) {
-    global[modelName] = db.define(modelName, modelDef.attributes, modelDef.options);
+  each(app.models, function eachModels(modelDef, modelName) {
+    global[modelName] = app.db.define(modelName, modelDef.attributes, modelDef.options);
     console.debug('define ' + modelName);
   });
 
-  each(Models, setAssociation);
+  each(app.models, setAssociation);
 }
 

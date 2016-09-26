@@ -7,7 +7,7 @@ module.exports = {
   pattern: 'make:models',
   help: 'Create model from database',
   function: function run(req, res) {
-    if (app.config.core.modelsCreator.models.length === 0) {
+    if (app.config('core.modelsCreator.models').length === 0) {
       res.yellow('Please add models to import in Config/core.js').ln();
       return res.prompt();
     }

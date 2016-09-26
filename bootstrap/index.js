@@ -1,34 +1,40 @@
 'use strict';
-/*eslint no-undef: 0*/
-var utils = require('../lib/utils');
+/* global app,appdir,bug */
 var raven = require('raven');
-global.logger = require('debug-logger');
-/* istanbul ignore if */
-if (!global.appdir) {
-  global.appdir = utils.workspace();
-}
-global.config = require('./config')();
-var console = logger(config.core.log.prefix + ':app');
+var defaults = require('lodash/defaults');
+var Config = require('./config');
 
-logger.inspectOptions = {
+app.logger = require('debug-logger');
+app.config = new Config(appdir);
+var logPrefix = app.config('core.log.prefix');
+var console = app.logger(logPrefix + ':app');
+
+app.logger.inspectOptions = {
   colors: true
 };
 /* istanbul ignore else*/
-if (config.app && config.app.debug) {
-  process.env.DEBUG = config.core.log.prefix + '*';
-  console.log('set env.debug to ' + config.core.log.prefix + '*');
+if (app.config('app.debug')) {
+  process.env.DEBUG = logPrefix + '*';
+  console.log('set env.debug to ' + logPrefix + '*');
 }
 
-global.i18n = require('i18n');
-i18n.configure(config.core.langs);
+app.trans = require('i18n');
+var langConfig = app.config('core.langs');
+var transLogger = app.logger(logPrefix + ':trans');
+var defaultsLangConfig = {
+  logDebugFn: transLogger.debug,
+  logWarnFn: transLogger.warn,
+  logErrorFn: transLogger.log
+};
+
+langConfig = defaults(langConfig, defaultsLangConfig);
+app.trans.configure(langConfig);
 // no need sentry in test
 /* istanbul ignore if */
-if (process.env.NODE_ENV !== "development" &&
-  typeof config.services !== "undefined" &&
-  typeof config.services.raven !== "undefined"
-) {
-  var consoleBug = logger(config.core.log.prefix + ':Sentry');
-  global.bug = new raven.Client(config.services.raven.dsn);
+if (process.env.NODE_ENV !== "development" && app.config('services.raven', false)) {
+  global.bug = new raven.Client(app.config('services.raven.dsn'));
+  var consoleBug = app.logger(logPrefix + ':Sentry');
+
   bug.setTagsContext({
     Logger: "node"
   });
