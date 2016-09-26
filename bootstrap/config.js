@@ -1,14 +1,68 @@
 'use strict';
+// TODO: move to lib @tag
+/* global app */
 
-/* global appdir,logger */
 var include = require('include-all');
-module.exports = function exportConfig() {
-  var config = include({
+var console;
+
+var Config = function Config(appdir) {
+  this.config = include({
     dirname: appdir + '/Config',
     filter: /(.+)\.js$/
   });
-  var console = logger(config.core.log.prefix + ':config');
+  console = app.logger(this.config.core.log.prefix + ':config');
   console.debug('config loaded');
+  var self = this;
+
+  return function getConfig(key, def) {
+    if (!key) {
+      return self;
+    }
+    return self.get(key, def);
+  };
+};
+
+Config.prototype.get = function get(key, def) {
+  var reduce = function reduce(obj, index) {
+    if (!obj) {
+      return;
+    }
+    return obj[index];
+  };
+  var config = key.split('.').reduce(reduce, this.config);
+
+  if (!config && typeof config !== 'boolean') {
+    if (def instanceof Error) {
+      throw def;
+    }
+    return def;
+  }
   return config;
-}
+};
+
+Config.prototype.set = function set(key, value) {
+  var tags = key.split(".");
+  var len = tags.length - 1;
+  var obj = this.config;
+
+  for (var index = 0; index < len; index++) {
+    if (!obj[tags[index]]) {
+      obj[tags[index]] = {};
+    }
+    obj = obj[tags[index]];
+
+  }
+  if (!value) {
+    delete obj[tags[len]];
+    return;
+  }
+  obj[tags[len]] = value;
+};
+
+Config.prototype.env = function getEnv(key, def) {
+  var env = process.env[key];
+  return env ? env : def;
+};
+
+module.exports = Config;
 
