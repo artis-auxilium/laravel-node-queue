@@ -2,8 +2,18 @@
 /*eslint no-magic-numbers:0*/
 
 var mockStdin = require('mock-stdin');
+var self;
+var BddStdin = function BddStdin() {
+  if (!(this instanceof BddStdin)) {
+    throw new Error('bdd stdin not initialised');
+  }
+  this.stdin = mockStdin.stdin();
 
-var bddStdin = function bddStdin(responses) {
+  self = this;
+  return this;
+};
+
+BddStdin.prototype.type = function type(responses) {
   if (arguments.length > 1) {
     responses = Array.prototype.slice.call(arguments, 0);
   }
@@ -18,28 +28,24 @@ var bddStdin = function bddStdin(responses) {
     throw new Error('Expected at least 1 response, not ' + JSON.stringify(responses, null, 2));
   }
 
-  var stdin = mockStdin.stdin();
-
   var key = 0;
-
   var sendAnswer = function sendAnswer() {
     setTimeout(function timeoutSendAnswer() {
       var text = responses[key];
       if (typeof text !== 'string') {
         throw new Error('Should give only text responses ' + JSON.stringify(responses, null, 2));
       }
-      stdin.send(text);
+      self.stdin.send(text);
       key += 1;
       if (key < responses.length) {
         sendAnswer();
       }
-    }, 200);
-  }
-
+    }, 300);
+  };
   sendAnswer();
-}
+};
 
-bddStdin.keys = Object.freeze({
+BddStdin.keys = Object.freeze({
   up: '\u001b[A',
   down: '\u001b[B',
   left: '\u001b[D',
@@ -47,4 +53,5 @@ bddStdin.keys = Object.freeze({
   delete: '\u0008'
 });
 
-module.exports = bddStdin;
+module.exports = BddStdin;
+
