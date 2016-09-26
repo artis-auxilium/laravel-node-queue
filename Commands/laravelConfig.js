@@ -1,6 +1,7 @@
 'use strict';
 /* global app,appdir */
 /* eslint global-require: 0 */
+
 var Promise = require('bluebird');
 var shelljs = require('shelljs');
 var utils = require('../lib/utilsCmd');
@@ -9,7 +10,7 @@ var includes = require('lodash/includes');
 var each = require('lodash/each');
 var include = require('include-all');
 var tmp = require('tmp');
-var request, tmpdir;
+var request, tmpdir, console, response;
 var toTransforms = [];
 
 var prepareTmpFolder = function prepareTmpFolder() {
@@ -19,7 +20,7 @@ var prepareTmpFolder = function prepareTmpFolder() {
       unsafeCleanup: true
     }, function tmpDirCallback(err, name) {
       if (err) {
-        reject(err)
+        reject(err);
       }
       fs.mkdir(name + '/Config-laravel')
         .then(function tmpdirOk() {
@@ -28,7 +29,7 @@ var prepareTmpFolder = function prepareTmpFolder() {
 
     });
   });
-}
+};
 
 var cmd = function cmd(command, dontParse) {
   return new Promise(function promiseCmd(resolve, reject) {
@@ -55,7 +56,7 @@ var cmd = function cmd(command, dontParse) {
 
 var getConfig = function getConfig(configs) {
   var questions = [];
-  var laravelConfig = app.config.laravel.config;
+  var laravelConfig = app.config('laravel.config');
   var laravelKeys = Object.keys(laravelConfig);
   var cleanAnswers = [];
   return new Promise(function promiseConfigs(resolve) {
@@ -91,9 +92,10 @@ var write = function write(conf) {
   var path = '';
   var message = null;
   return new Promise(function promiseWrite(resolve, reject) {
-    cmd('php ' + app.config.laravel.path + '/artisan node:config ' + conf, true)
+    cmd('php ' + app.config('laravel.path') + '/artisan node:config ' + conf, true)
       .then(function commandOk(data) {
-        if (!app.config.laravel.config[conf] || app.config.laravel.config[conf].asis) {
+        console.debug('transform ', conf, !app.config('laravel.config.' + conf + '.asis', true));
+        if (app.config('laravel.config.' + conf + '.asis', true)) {
           path = appdir + '/Config';
           message = conf + ' created';
         } else {
@@ -140,50 +142,61 @@ var nodeConfig = function nodeConfig() {
       filter: /(.+)\.js$/
     });
     var conf, loaded, error;
-
     each(toTransforms, function eachConfig(toTransform) {
       error = loaded = conf = null;
+      var transformer;
       try {
-        conf = require(appdir + '/lib/Config/' + toTransform)(laravelConfig[toTransform]);
+        transformer = require(appdir + '/lib/Config/' + toTransform);
         loaded = true;
-      } catch (errorAppload) {
-        if (errorAppload.code) {
-          error = new Error('cant find /lib/Config/' + toTransform + '.js');
-        } else {
-          error = errorAppload
-        }
-        loaded = false;
+      } catch (errorInUserLoad) {
+        error = 'cant find /lib/Config/' + toTransform + '.js';
       }
+      if (loaded) {
+        try {
+          conf = transformer(laravelConfig[toTransform]);
+        } catch (errorIntransformer) {
+          error = errorIntransformer.message;
+          loaded = false;
+        }
+      }
+      /* istanbul ignore else */
       if (!loaded) {
         try {
           conf = require('../lib/Config/' + toTransform)(laravelConfig[toTransform]);
           loaded = true;
+
         } catch (errorCoreload) {
-          if (errorCoreload.code) {
-            error = new Error('cant find /lib/Config/' + toTransform + '.js');
-          } else {
-            error = errorCoreload
+          if (!error || error === 'cant find /lib/Config/' + toTransform + '.js') {
+            /* istanbul ignore else */
+            if (errorCoreload.code) {
+              error = 'cant find /lib/Config/' + toTransform + '.js';
+            } else {
+              error = errorCoreload.message;
+            }
           }
           loaded = false;
         }
       }
       if (!loaded) {
-        return reject(error);
+        conf = laravelConfig[toTransform];
+        response.red('config ' + toTransform + ' not trandformed').ln();
+        response.red(error).ln();
       }
       var content = utils.formatConfig(conf);
       cmds.push(fs.writeFile(appdir + '/Config/' + toTransform + '.js', content));
 
-    })
-
-    Promise.all(cmds).then(function allWriteOk() {
-      var result = [];
-      each(toTransforms, function eachConfig(confWrited) {
-        result.push(confWrited + ' created');
-      });
-      resolve(result);
-    }).catch(function writeKo(err) {
-      reject(err);
     });
+
+    Promise.all(cmds)
+      .then(function allWriteOk() {
+        var result = [];
+        each(toTransforms, function eachConfig(confWrited) {
+          result.push(confWrited + ' created');
+        });
+        resolve(result);
+      }).catch(function writeKo(err) {
+        reject(err);
+      });
 
   });
 
@@ -193,15 +206,17 @@ module.exports = {
   pattern: 'laravel:config',
   help: 'Get config from laravel',
   function: function run(req, res) {
+    console = app.logger(app.config('core.log.prefix') + ':laravelConfig');
     request = req;
+    response = res;
     return prepareTmpFolder()
       .then(function folderPrepared(name) {
-        tmpdir = name
-        return cmd('php ' + app.config.laravel.path + '/artisan node:config')
+        tmpdir = name;
+        return cmd('php ' + app.config('laravel.path') + '/artisan node:config');
       })
       .then(getConfig)
       .then(function questionAsked(answers) {
-        var laravelKeys = Object.keys(app.config.laravel.config);
+        var laravelKeys = Object.keys(app.config('laravel.config', []));
         var setting = {};
         var hasSetting = false;
         for (var key in answers) {
@@ -218,7 +233,7 @@ module.exports = {
           res.yellow('add this to config in Config/laravel.js to save this responses').ln();
           res.yellow(utils.formatConfig(setting)).ln();
         }
-        return writeConfs(answers)
+        return writeConfs(answers);
       })
       .then(function displayConfCreated(result) {
         each(result, function eachResult(message) {

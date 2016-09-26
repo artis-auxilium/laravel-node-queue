@@ -1,5 +1,6 @@
 'use strict';
 /* global app,appdir */
+
 var fs = require('fs-promise');
 var shelljs = require('shelljs');
 var path = require('path');
@@ -20,13 +21,13 @@ var askLaravelFolder = function askLaravelFolder() {
   });
 };
 
-var CheckArtisan = function checkArtisan(cmdRes) {
+var checkArtisan = function checkArtisan(cmdRes) {
   return new Promise(function promiseCheckArtisan(resolve, reject) {
     var test = cmdRes.match(/\s*Laravel\s+Framework\s+version\s+(.*)/);
     if (test) {
       return resolve(test);
     }
-    reject('not a laravel framework');
+    reject(new Error('not a laravel framework'));
   });
 };
 
@@ -56,7 +57,7 @@ var askCommandFolder = function askCommandFolder() {
 
     });
   });
-}
+};
 var cpCommand = function cpCommand(laravelCommandPath) {
   return new Promise(function promiseCpCommand(resolve, reject) {
     var here = __dirname;
@@ -66,7 +67,7 @@ var cpCommand = function cpCommand(laravelCommandPath) {
       var message = 'maybe you need to add "\\App\\Console\\Commands\\NodeConfig::class" to ';
       message += path.normalize(path.dirname(laravelCommandPath) + '/../') + 'kernel.php';
       response.yellow(message).ln();
-      return resolve()
+      return resolve();
     }).catch(function catchFsStatCmd() {
       try {
         var resCp = shelljs.cp(commandPath, laravelCommandPath);
@@ -74,7 +75,7 @@ var cpCommand = function cpCommand(laravelCommandPath) {
           return reject(resCp.stderr);
         }
       } catch (error) {
-        reject(error);
+        return reject(error);
       }
 
       response.green('command copied to ' + laravelCommandPath).ln();
@@ -85,11 +86,11 @@ var cpCommand = function cpCommand(laravelCommandPath) {
     });
 
   });
-}
+};
 
 var writeConf = function writeConf() {
   return new Promise(function promiseWrite(resolve, reject) {
-    var config = app.config.laravel;
+    var config = app.config('laravel');
     config.path = laravelPath;
     var data = JSON.stringify(config);
     var comment = "/**\n";
@@ -143,11 +144,11 @@ module.exports = {
         return cmd('php ' + result + '/artisan -V --no-ansi');
       })
       .then(function cmdExecuted(result) {
-        return CheckArtisan(result);
+        return checkArtisan(result);
       })
       .then(function artisanChecked(result) {
         res.green('install command on laravel v' + result[1]).ln();
-        return askCommandFolder()
+        return askCommandFolder();
       })
       .then(function commandFolderAsked(cmdPath) {
         var laravelCommandPath = path.resolve(laravelPath, cmdPath, 'NodeConfig.php');
@@ -157,9 +158,9 @@ module.exports = {
       }).then(function waitUserInput() {
         req.question('when done type enter', function tapeEnter() {
           req.shell.isShell = false;
-          app.config.laravel.path = laravelPath;
+          app.config().set('laravel.path', laravelPath);
           req.shell.run('laravel:config');
-        })
+        });
 
       })
 
