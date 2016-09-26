@@ -5,60 +5,111 @@
 
 var rewire = require('rewire');
 var path = require('path');
-var bddStdin = require('../lib/bdd-stdin');
+var BddStdin = require('../utils/bdd-stdin');
 var shell = require('../../lib/shell');
-var init = require('../../Commands/init');
-var laravelConfig = require('../../Commands/laravelConfig');
 var intercept = require('intercept-stdout');
 var each = require('lodash/each');
-
+var laravelConfig = require('../../Commands/laravelConfig');
+var laraveldir = path.resolve(__dirname, '../data/laravel_fa');
 var stdout;
+var init;
 var unhookIntercept;
+var userInput = [
+  [
+    'init\n',
+    laraveldir,
+    '\t',
+    '\t',
+    '\n',
+    '\n',
+    'quit\n'
+  ],
+  [
+    'init\n',
+    laraveldir,
+    '\t',
+    '\t',
+    '\n',
+    '\n',
+    'quit\n'
+  ],
+  [
+    'ini\t',
+    '\n',
+    '\t',
+    'lib',
+    '\t',
+    '\t',
+    BddStdin.keys.delete,
+    BddStdin.keys.delete,
+    BddStdin.keys.delete,
+    BddStdin.keys.delete,
+    BddStdin.keys.delete,
+    BddStdin.keys.delete,
+    BddStdin.keys.delete,
+    BddStdin.keys.delete,
+    BddStdin.keys.delete,
+    BddStdin.keys.delete,
+    laraveldir,
+    '\t',
+    '\t',
+    '\n',
+    '\n',
+    ' \n'
+  ],
+  [
+    'init\n',
+    laraveldir,
+    '\t',
+    '\t',
+    '\n',
+    '\n',
+    ' \n'
+  ],
+  [
+    'init\n',
+    laraveldir,
+    '\t',
+    '\t',
+    '\n',
+    'quit\n'
+  ],
+  [
+    'init\n',
+    laraveldir,
+    '\t',
+    '\t',
+    '\n',
+    'quit\n'
+  ]
+
+];
 
 module.exports = {
   setUp: function setUp(cb) {
+    var bddStdin = new BddStdin().type;
+    rewire('../utils/bootstrap');
+    init = rewire('../../Commands/init');
     stdout = [];
     process.argv = ['node', appdir + '/artisan'];
 
-    var laraveldir = path.resolve(__dirname, '../data/laravel_fa');
-    bddStdin([
-      'ini\t',
-      '\n',
-      '\t',
-      'lib',
-      '\t',
-      '\t',
-      bddStdin.keys.delete,
-      bddStdin.keys.delete,
-      bddStdin.keys.delete,
-      bddStdin.keys.delete,
-      bddStdin.keys.delete,
-      bddStdin.keys.delete,
-      bddStdin.keys.delete,
-      bddStdin.keys.delete,
-      bddStdin.keys.delete,
-      bddStdin.keys.delete,
-      laraveldir,
-      '\t',
-      '\t',
-      '\n',
-      '\n',
-      ' \n'
-    ]);
+    bddStdin(userInput.shift());
 
     unhookIntercept = intercept(function onIntercept(txt) {
       stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       // return '';
     });
-    global.app = new shell({
+    app.init({
       chdir: appdir + '/'
     });
-    app.config = rewire('../../bootstrap/config')();
-    app.config.laravel.addToApp = {
+    app.config().set('laravel.addToApp', {
       job: {
         example: "example"
       }
-    };
+    });
+    app.config().set('laravel.config.example', {
+      import: false
+    });
     app.configure(function configureApp() {
       app.use(shell.router({
         shell: app
@@ -69,10 +120,64 @@ module.exports = {
     });
     app.on('error', function appError() {
       unhookIntercept();
-    })
+    });
     app.cmd(init.pattern, init.help, init.function);
     app.cmd(laravelConfig.pattern, laravelConfig.help, laravelConfig.function);
     cb();
+  },
+  'test cp error': function testCpError(test) {
+
+    process.stdin.destroy = function stdinDestroy() {
+      unhookIntercept();
+
+      var toTest = [
+        'command not executed'
+      ];
+      each(toTest, function eachToTest(value) {
+        test.ok(stdout.indexOf(value) > -1, value);
+      });
+      test.done();
+    };
+    var shellJsMock = {
+      exec: function exec(cmd, opt, cb) {
+        return cb(null, 'Laravel Framework version 5.2.43');
+      },
+      cp: function exec() {
+        return {
+          stderr: new Error('command not executed')
+        };
+      }
+    };
+    init.__set__({
+      shelljs: shellJsMock
+    });
+    app.start();
+  },
+  'test cp throw error': function testCpTrhrowError(test) {
+
+    process.stdin.destroy = function stdinDestroy() {
+      unhookIntercept();
+
+      var toTest = [
+        'command not executed'
+      ];
+      each(toTest, function eachToTest(value) {
+        test.ok(stdout.indexOf(value) > -1, value);
+      });
+      test.done();
+    };
+    var shellJsMock = {
+      exec: function exec(cmd, opt, cb) {
+        return cb(null, 'Laravel Framework version 5.2.43');
+      },
+      cp: function exec() {
+        throw new Error('command not executed');
+      }
+    };
+    init.__set__({
+      shelljs: shellJsMock
+    });
+    app.start();
   },
   'test init': function testInit(test) {
 
@@ -93,12 +198,13 @@ module.exports = {
         'database created',
         'mail created',
         'app created'
-      ]
+      ];
       each(toTest, function eachToTest(value) {
-        test.ok(stdout.indexOf(value) > -1);
+        test.ok(stdout.indexOf(value) > -1, value);
       });
       test.done();
-    }
+    };
+    app.start();
 
   },
   'test init allready': function testInitAllready(test) {
@@ -120,13 +226,59 @@ module.exports = {
         'database created',
         'mail created',
         'app created'
-      ]
+      ];
       each(toTest, function eachToTest(value) {
-        test.ok(stdout.indexOf(value) > -1);
+        test.ok(stdout.indexOf(value) > -1, value);
       });
       test.done();
-    }
+    };
+    app.start();
+  },
+  'test Not laravel': function testNotLaravel(test) {
 
+    process.stdin.destroy = function stdinDestroy() {
+      unhookIntercept();
+
+      var toTest = [
+        'not a laravel framework'
+      ];
+      each(toTest, function eachToTest(value) {
+        test.ok(stdout.indexOf(value) > -1, value);
+      });
+      test.done();
+    };
+    var shellJsMock = {
+      exec: function exec(cmd, opt, cb) {
+        return cb(null, 'another framework v1.2.3');
+      }
+    };
+    init.__set__({
+      shelljs: shellJsMock
+    });
+    app.start();
+  },
+  'test cmd error': function testCmdError(test) {
+
+    process.stdin.destroy = function stdinDestroy() {
+      unhookIntercept();
+
+      var toTest = [
+        'command not executed'
+      ];
+      each(toTest, function eachToTest(value) {
+        test.ok(stdout.indexOf(value) > -1, value);
+      });
+      test.done();
+    };
+    var shellJsMock = {
+      exec: function exec(cmd, opt, cb) {
+        return cb(null, null, new Error('command not executed'));
+      }
+    };
+    init.__set__({
+      shelljs: shellJsMock
+    });
+    app.start();
   }
-}
+};
 

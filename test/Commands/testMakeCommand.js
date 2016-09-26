@@ -3,11 +3,26 @@
 /* global app,appdir*/
 
 var rewire = require('rewire');
-var bddStdin = require('../lib/bdd-stdin');
+var BddStdin = require('../utils/bdd-stdin');
 var shell = require('../../lib/shell');
 var makeCommand = rewire('../../Commands/makeCommand');
 var intercept = require('intercept-stdout');
+
+var bddStdin;
 module.exports = {
+  setUp: function setUp(callback) {
+    bddStdin = new BddStdin().type;
+    rewire('../utils/bootstrap');
+    app.configure(function configureApp() {
+      app.use(shell.router({
+        shell: app
+      }));
+    });
+    callback();
+  },
+  tearDown: function tearDown(callback) {
+    callback();
+  },
   'test make command': function testMakeCommand(test) {
     var stdout = [];
     bddStdin('');
@@ -15,24 +30,19 @@ module.exports = {
     var unhookIntercept = intercept(function onIntercept(txt) {
       stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
     });
-    global.app = new shell({
+    app.init({
       chdir: appdir + '/'
-    });
-    app.config = rewire('../../bootstrap/config')();
-    app.configure(function configureApp() {
-      app.use(shell.router({
-        shell: app
-      }));
     });
     app.on('error', function appError() {
       unhookIntercept();
-    })
+    });
     app.cmd(makeCommand.pattern, makeCommand.help, makeCommand.function);
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
-      test.ok(stdout.indexOf('command created') > -1);
+      test.ok(stdout.indexOf('command created') > -1, 'command not created');
       test.done();
-    }
+    };
+    app.start();
   },
   'test make command fail': function testMakeCommandFail(test) {
     var stdout = [];
@@ -49,26 +59,22 @@ module.exports = {
     var unhookIntercept = intercept(function onIntercept(txt) {
       stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
     });
-    global.app = new shell({
+    app.init({
       chdir: appdir + '/'
     });
-    app.config = rewire('../../bootstrap/config')();
-    app.configure(function configureApp() {
-      app.use(shell.router({
-        shell: app
-      }));
-    });
+
     app.on('error', function appError(error) {
       console.log(error);
       unhookIntercept();
-    })
+    });
     app.cmd(makeCommand.pattern, makeCommand.help, makeCommand.function);
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
-      test.ok(stdout.indexOf('file not writable') > -1);
+      test.ok(stdout.indexOf('file not writable') > -1, 'file not writable');
       test.done();
-    }
+    };
+    app.start();
   }
 
-}
+};
 

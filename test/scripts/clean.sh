@@ -14,3 +14,4 @@ rm -Rf "${BASEDIR}/data/base/ModelsNew"
 rm -Rf "${BASEDIR}/test/data/laravel_fake/app/Console/Commands"
 rm -f "${BASEDIR}/data/base/Models/User.js"
 git checkout HEAD -- data/base/Config/laravel.js
+git checkout HEAD -- data/base/lib/Config/example.js
