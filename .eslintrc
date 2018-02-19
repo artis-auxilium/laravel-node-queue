@@ -3,6 +3,10 @@ ecmaFeatures:
 
 #plugins: ["jsdoc"]
 
+globals:
+  describe: true
+  test: true
+
 env:
   amd: true
   es6: true
@@ -98,7 +102,7 @@ rules:
   yoda: 2
 
   # Strict
-  strict: 2
+  strict: 0
 
   # Variables
   init-declarations: 0

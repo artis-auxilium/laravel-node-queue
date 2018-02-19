@@ -8,6 +8,7 @@
   "scripts": {
     "pretest": "./test/scripts/clean.sh",
     "test": "istanbul cover nodeunit -- test/ --reporter tap",
+    "jest": "jest",
     "posttest": "./test/scripts/clean.sh",
     "postinstall": "./scripts/install.sh",
     "gen-docs": "jsdoc --configure .jsdoc.json --verbose"
@@ -26,6 +27,33 @@
     "queue",
     "Broadcast"
   ],
+  "jest": {
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text-summary"
+    ],
+    "testEnvironment": "node",
+    "verbose": true,
+    "expand": true,
+    "useStderr": true,
+    "setupFiles": [
+      "<rootDir>/test/utils/bootstrap.js"
+    ],
+    "collectCoverageFrom": [
+      "**/*.{ts,js}"
+    ],
+    "globals": {
+      "app": {}
+    },
+    "coverageDirectory": "/var/www/reports/laravel-queue/jest/",
+    "coveragePathIgnorePatterns": [
+      "data",
+      "test",
+      "bin"
+    ],
+    "collectCoverage": true
+  },
   "author": "ICFR",
   "license": "MIT",
   "dependencies": {
@@ -58,6 +86,7 @@
     "tmp": "0.0.29"
   },
   "devDependencies": {
+    "jest": "~22.3.0",
     "minami": "^1.1.1"
   }
 }
