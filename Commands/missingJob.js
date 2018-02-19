@@ -40,26 +40,27 @@ var updateLaravelConf = function updateLaravelConf() {
 };
 
 var createJob = function createJob(jobName) {
-  var jobFile = "var queue = new Queue('" + jobName + "',app.queueOption);\n";
+  var jobFile = '/* global app,Queue,bug */\n';
+  jobFile += "var queue = new Queue('" + jobName + "',app.queueOption);\n";
   jobFile += "var console = app.logger('" + app.config('core.log.prefix') + ":" + jobName + "');\n";
-  jobFile += "var reportResult = function(jobId, result) {\n";
+  jobFile += "var reportResult = function reportResult (jobId, result) {\n";
   jobFile += "if (result){\n";
-  jobFile += "console.info('Result " + jobName + ": ' + result);\n";
+  jobFile += "console.info('Result " + jobName + ": ', result);\n";
   jobFile += "}else{\n";
   jobFile += "console.log('job " + jobName + " '+jobId+' finished');\n}\n};\n";
-  jobFile += "var retrying = function(jobId, err) {\n";
+  jobFile += "var retrying = function retrying (jobId, err) {\n";
   jobFile += "console.error('Job " + jobName + " ' + jobId + ' failed with error ' + err.message + '";
   jobFile += "but is being retried!');\n";
   jobFile += "};\n";
-  jobFile += "var failed = function(jobId, err) {\n";
+  jobFile += "var failed = function failed (jobId, err) {\n";
   jobFile += "console.error('Job " + jobName + " ' + jobId + ' failed with error ' + err.message);\n";
   jobFile += "bug.captureException(err);\n};\n\n";
   jobFile += "//queue.checkStalledJobs(5000, function(err) {\n";
   jobFile += "//console.log('Checked stalled jobs for " + jobName + "'); // prints every 5000 ms\n";
   jobFile += "//if (err) {\n";
   jobFile += "//console.log(err);\n//}\n//});\n\n";
-  jobFile += "queue.on('ready', function() {\n";
-  jobFile += "queue.process(function(job, done) {\n";
+  jobFile += "queue.on('ready', function ready() {\n";
+  jobFile += "queue.process(function process(job, done) {\n";
   jobFile += "console.info('Processing job " + jobName + " ' + job.id);\n";
   jobFile += "//on error\n";
   jobFile += "// return done({\n";
@@ -69,7 +70,7 @@ var createJob = function createJob(jobName) {
   jobFile += "queue.on('job succeeded', reportResult);\n";
   jobFile += "queue.on('job retrying', retrying);\n";
   jobFile += "queue.on('job failed', failed);\n});\n";
-  jobFile += "var add = function(options) {\n";
+  jobFile += "var add = function add(options) {\n";
   jobFile += "return queue.createJob(options).retries(3).save();\n};\n\n";
   jobFile += "module.exports.add = add;\n";
 
