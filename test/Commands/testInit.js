@@ -10,7 +10,7 @@ var shell = require('../../lib/shell');
 var intercept = require('intercept-stdout');
 var each = require('lodash/each');
 var laravelConfig = require('../../Commands/laravelConfig');
-var laraveldir = path.resolve(__dirname, '../data/laravel_fa');
+var laraveldir = path.resolve(__dirname, '../data/laravel_fake');
 var stdout;
 var init;
 var unhookIntercept;
@@ -153,7 +153,7 @@ module.exports = {
     });
     app.start();
   },
-  'test cp throw error': function testCpTrhrowError(test) {
+  'test cp throw error': function testCpThrowError(test) {
 
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -187,8 +187,8 @@ module.exports = {
         'path to laravel project: ',
         'install command on laravel v5.2.43',
         'path to commands folder: [app/Console/Commands/] ',
-        'command copied to /var/node/test-laraqueue/node_modules_fake/laravel-queue/test/data/laravel_fake/app/Console/Commands/NodeConfig.php',
-        'add "\\App\\Console\\Commands\\NodeConfig::class" to /var/node/test-laraqueue/node_modules_fake/laravel-queue/test/data/laravel_fake/app/Console/kernel.php',
+        `command copied to ${laraveldir}/app/Console/Commands/NodeConfig.php`,
+        `add "\\App\\Console\\Commands\\NodeConfig::class" to ${laraveldir}/app/Console/kernel.php`,
         'when done type enter ',
         'services created',
         'queue created',
@@ -216,7 +216,7 @@ module.exports = {
         'install command on laravel v5.2.43',
         'path to commands folder: [app/Console/Commands/] ',
         'NodeConfig.php allready in your laravel project',
-        'maybe you need to add "\\App\\Console\\Commands\\NodeConfig::class" to /var/node/test-laraqueue/node_modules_fake/laravel-queue/test/data/laravel_fake/app/Console/kernel.php',
+        `maybe you need to add "\\App\\Console\\Commands\\NodeConfig::class" to ${laraveldir}/app/Console/kernel.php`,
         'when done type enter ',
         'services created',
         'queue created',
