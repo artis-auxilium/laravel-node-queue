@@ -1,5 +1,4 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/28289bb4d19c43d6857a40f8826c61a1)](https://www.codacy.com/app/icfr-eirl/laravel-node-queue?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=icfr/laravel-node-queue&amp;utm_campaign=Badge_Grade)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/28289bb4d19c43d6857a40f8826c61a1)](https://www.codacy.com/app/icfr-eirl/laravel-node-queue?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=icfr/laravel-node-queue&amp;utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/83770719db9d4480a1f2162c3399c325)](https://www.codacy.com/app/icfr/laravel-node-queue_2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=artis-auxilium/laravel-node-queue&amp;utm_campaign=Badge_Grade)
 
 # node server for Laravel queue
 
