@@ -23,7 +23,7 @@ var askLaravelFolder = function askLaravelFolder() {
 
 var checkArtisan = function checkArtisan(cmdRes) {
   return new Promise(function promiseCheckArtisan(resolve, reject) {
-    var test = cmdRes.match(/\s*Laravel\s+Framework\s+version\s+(.*)/);
+    var test = cmdRes.match(/\s*Laravel\s+Framework\s+(version)?\s+(.*)/);
     if (test) {
       return resolve(test);
     }
@@ -147,7 +147,7 @@ module.exports = {
         return checkArtisan(result);
       })
       .then(function artisanChecked(result) {
-        res.green('install command on laravel v' + result[1]).ln();
+        res.green('install command on laravel v' + result[2]).ln();
         return askCommandFolder();
       })
       .then(function commandFolderAsked(cmdPath) {
