@@ -7,7 +7,8 @@ var BddStdin = require('../utils/bdd-stdin');
 var shell = require('../../lib/shell');
 var intercept = require('intercept-stdout');
 var each = require('lodash/each');
-
+var path = require('path');
+global.appdir = path.resolve(__dirname, '../../data/base');
 var bddStdin;
 
 module.exports = {
