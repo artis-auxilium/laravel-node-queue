@@ -1,8 +1,8 @@
 'use strict';
-/*eslint no-magic-numbers:0*/
 
 var mockStdin = require('mock-stdin');
 var self;
+const waitAnswer = 300;
 var BddStdin = function BddStdin() {
   if (!(this instanceof BddStdin)) {
     throw new Error('bdd stdin not initialised');
@@ -40,7 +40,7 @@ BddStdin.prototype.type = function type(responses) {
       if (key < responses.length) {
         sendAnswer();
       }
-    }, 300);
+    }, waitAnswer);
   };
   sendAnswer();
 };
