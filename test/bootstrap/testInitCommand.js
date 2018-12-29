@@ -7,7 +7,8 @@ var BddStdin = require('../utils/bdd-stdin');
 var shell = require('../../lib/shell');
 var intercept = require('intercept-stdout');
 var each = require('lodash/each');
-
+var path = require('path');
+global.appdir = path.resolve(__dirname, '../../data/base');
 var bddStdin;
 
 module.exports = {
@@ -23,7 +24,9 @@ module.exports = {
     process.argv = ['node', appdir + '/artisan', 'help'];
     bddStdin('');
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
       // return '';
     });
     process.stdin.destroy = function stdinDestroy() {
@@ -45,8 +48,9 @@ module.exports = {
     process.argv = ['node', appdir + '/artisan', 'command:notfound'];
     bddStdin('');
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     rewire('../utils/bootstrap');
     app.init({

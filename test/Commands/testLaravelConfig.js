@@ -84,7 +84,7 @@ module.exports = {
     };
     app.start();
   },
-  'test write transorm fail': function testMakeCommandFail(test) {
+  'test write transform fail': function testMakeCommandFail(test) {
     var stdout = [];
     bddStdin('');
     process.argv = ['node', appdir + '/artisan', 'laravel:config'];
@@ -100,8 +100,9 @@ module.exports = {
       fs: fsMock
     });
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     app.init({
       chdir: appdir + '/'
@@ -151,8 +152,9 @@ module.exports = {
       shelljs: shelljsMock
     });
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     app.init({
       chdir: appdir + '/'
@@ -191,8 +193,9 @@ module.exports = {
       tmp: tmpMock
     });
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     app.init({
       chdir: appdir + '/'
@@ -233,8 +236,9 @@ module.exports = {
       shelljs: shelljsMock
     });
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     app.init({
       chdir: appdir + '/'
@@ -266,8 +270,9 @@ module.exports = {
     bddStdin('\n', 'y\n', 'n\n');
     process.argv = ['node', appdir + '/artisan', 'laravel:config'];
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     app.init({
       chdir: appdir + '/'
@@ -318,8 +323,9 @@ module.exports = {
     bddStdin('\n', 'y\n', 'n\n');
     process.argv = ['node', appdir + '/artisan', 'laravel:config'];
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     app.init({
       chdir: appdir + '/'
@@ -341,7 +347,7 @@ module.exports = {
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
       var toTest = [
-        'config example not trandformed',
+        'config example not transformed',
         'error in example file'
       ];
       each(toTest, function eachToTest(value) {

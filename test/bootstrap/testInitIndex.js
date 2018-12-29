@@ -21,8 +21,9 @@ module.exports = {
     test.expect(4);
     var stdout = [];
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     var appTest = rewire('../../bootstrap/app');
     var fakeRedis = new FakeRedis();

@@ -11,8 +11,6 @@ var jsdiff = require('diff');
 var colors = require('colors');
 var each = require('lodash/each');
 var rewire = require('rewire');
-var Shell = require('../../lib/shell/');
-global.app = new Shell();
 rewire('../../bootstrap');
 
 global.getDiff = function getDiff(base, other) {

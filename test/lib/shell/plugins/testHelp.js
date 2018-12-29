@@ -21,8 +21,9 @@ module.exports = {
   'test help plugin default settings': function test1(test) {
     var stdout = [];
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     process.argv = ['node', appdir + '/artisan'];
     bddStdin('help\n', 'quit\n');
@@ -44,12 +45,13 @@ module.exports = {
     };
     app.start();
   },
-  'test help plugin custom intoduction': function customIntroduction(test) {
+  'test help plugin custom introduction': function customIntroduction(test) {
     var stdout = [];
     process.argv = ['node', appdir + '/artisan'];
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     bddStdin('help\n', 'quit\n');
     app.init({
@@ -75,8 +77,9 @@ module.exports = {
   'test help plugin help command': function customIntroduction(test) {
     var stdout = [];
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     process.argv = ['node', appdir + '/artisan'];
     bddStdin('help test\n', 'help test:second\n', 'help test:third\n', 'help not:found\n', 'quit\n');
@@ -110,7 +113,7 @@ module.exports = {
         '<2argument> ',
         '[<autre>] ',
         'Arguments:',
-        '  argument       test [default: "default"]\n  2argument      deuxieme argument \n  autre          [default: "pour"]\n',
+        '  argument        test [default: "default"]\n  2argument       deuxieme argument \n  autre           [default: "pour"]\n',
         'Options:',
         '--option            ',
         'test:second',

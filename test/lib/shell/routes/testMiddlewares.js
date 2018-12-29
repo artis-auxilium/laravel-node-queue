@@ -33,8 +33,9 @@ module.exports = {
     process.argv = ['node', appdir + '/artisan', 'test:middleware'];
     bddStdin('y\n');
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -62,8 +63,9 @@ module.exports = {
     process.argv = ['node', appdir + '/artisan', 'test:middleware'];
     bddStdin('n\n');
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -90,8 +92,9 @@ module.exports = {
     process.argv = ['node', appdir + '/artisan', 'test:middleware'];
     bddStdin('');
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -117,8 +120,9 @@ module.exports = {
     process.argv = ['node', appdir + '/artisan'];
     bddStdin('', 'test:middleware\n', 'quit\n');
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -142,18 +146,9 @@ module.exports = {
     process.argv = ['node', appdir + '/artisan'];
     bddStdin('test:middleware\n', 'quit\n');
     var unhookIntercept = intercept(function onIntercept(txt) {
-      try {
-        if (typeof txt === 'string') {
-          stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-        }
-      } catch (err) {
-        unhookIntercept();
-        console.log(typeof txt);
-        console.log(txt.toString());
-        console.log(err);
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
-
-      // return '';
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
