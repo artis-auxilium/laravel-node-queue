@@ -7,10 +7,17 @@
   "bugs": "https://github.com/icfr/laravel-node-queue/issues",
   "scripts": {
     "pretest": "./test/scripts/clean.sh",
-    "test": "istanbul cover nodeunit -- test/ --reporter tap",
+    "test": "istanbul cover nodeunit -- test/ ",
     "posttest": "./test/scripts/clean.sh",
     "postinstall": "./scripts/install.sh",
     "gen-docs": "jsdoc --configure .jsdoc.json --verbose"
+  },
+  "ava": {
+    "files": [
+      "ava/**/*.js"
+    ],
+    "verbose": true,
+    "babel": false
   },
   "bin": {
     "artisan": "./bin/artisan",
@@ -30,34 +37,35 @@
   "license": "MIT",
   "dependencies": {
     "bee-queue": "^0.3.0",
-    "bluebird": "^3.4.6",
-    "colors": "^1.1.2",
+    "bluebird": "~3.5.3",
+    "colors": "~1.3.3",
     "debug-logger": "^0.4.1",
-    "diff": "^3.0.0",
+    "diff": "~3.5.0",
     "dotenv": "^2.0.0",
     "each": "^0.6.1",
     "ect": "^0.5.9",
     "fs-promise": "^0.5.0",
     "i18n": "^0.8.3",
-    "include-all": "^1.0.6",
+    "include-all": "~4.0.3",
     "intercept-stdout": "^0.1.2",
-    "ioredis": "^2.4.0",
-    "js-beautify": "^1.6.4",
-    "lodash": "^4.15.0",
-    "lodash-inflection": "^1.3.0",
-    "merge": "^1.2.0",
-    "mock-stdin": "^0.3.0",
-    "mysql": "^2.11.1",
-    "nodemailer": "^2.6.4",
-    "pad": "^1.0.1",
-    "raven": "^0.12.1",
-    "readdir": "0.0.13",
+    "ioredis": "~2.5.0",
+    "js-beautify": "~1.8.9",
+    "lodash": "~4.17.11",
+    "lodash-inflection": "~1.5.0",
+    "merge": "~1.2.1",
+    "mock-stdin": "~0.3.1",
+    "mysql": "~2.16.0",
+    "nodemailer": "~2.7.2",
+    "pad": "~1.2.1",
+    "raven": "~0.12.3",
+    "readdir": "~0.1.0",
     "rewire": "^2.5.2",
-    "sequelize": "^3.24.3",
-    "shelljs": "^0.7.4",
-    "tmp": "0.0.29"
+    "sequelize": "~4.42.0",
+    "shelljs": "~0.8.3",
+    "tmp": "0.0.33"
   },
   "devDependencies": {
-    "minami": "^1.1.1"
+    "minami": "~1.2.3",
+    "mysql2": "~1.6.4"
   }
 }
