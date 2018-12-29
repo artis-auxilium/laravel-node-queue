@@ -53,7 +53,6 @@ module.exports = {
         res.print('message from function');
 
         res.prompt();
-        // throw new Error('testr');
       }
     ]);
     app.start();
@@ -80,14 +79,13 @@ module.exports = {
     app.cmd('test:middleware', [
       shell.routes.confirm('are you sure'),
       function afterMiddleware(req, res) {
-        // throw new Error('testr');
         res.print('message from function');
         res.prompt();
       }
     ]);
     app.start();
   },
-  'test shellonly Middelware No': function confirmMiddelwareNo(test) {
+  'test shell only Middelware No': function confirmMiddelwareNo(test) {
     var stdout = [];
     process.argv = ['node', appdir + '/artisan', 'test:middleware'];
     bddStdin('');
@@ -115,7 +113,7 @@ module.exports = {
     ]);
     app.start();
   },
-  'test shellonly Middelware Yes': function confirmMiddelwareYes(test) {
+  'test shell only Middelware Yes': function confirmMiddelwareYes(test) {
     var stdout = [];
     process.argv = ['node', appdir + '/artisan'];
     bddStdin('', 'test:middleware\n', 'quit\n');

@@ -23,7 +23,7 @@ Install laravel-queue
 npm install --save laravel-queue
 ```
 
-After init the apllication
+After init the application
 
 ```
 ./artisan init
@@ -32,7 +32,7 @@ After init the apllication
 It ask for laravel project path then ask for command path
 (relative to laravel project path)
 then when asked add this to Console/kernel.php
-> if your commands folder is not standart(e.g app/Console/Commands),
+> if your commands folder is not standard(e.g app/Console/Commands),
 dont forget to change namespace of the class
 
 ```php
