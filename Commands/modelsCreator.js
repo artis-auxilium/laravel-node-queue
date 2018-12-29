@@ -9,7 +9,8 @@ module.exports = {
   function: function run(req, res) {
     if (app.config('core.modelsCreator.models').length === 0) {
       res.yellow('Please add models to import in Config/core.js').ln();
-      return res.prompt();
+      res.prompt();
+      return;
     }
     var dbModels = require('../lib/db-models');
     dbModels()

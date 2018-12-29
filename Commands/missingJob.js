@@ -92,11 +92,13 @@ module.exports = {
     if (!app.config('app')) {
       res.red('app config missing').ln();
       res.yellow('see manual for setup config from laravel').ln();
-      return res.prompt();
+      res.prompt();
+      return;
     }
     if (Object.keys(app.config('app.job', [])).length === 0) {
       res.yellow('no job in Config/app.js').ln();
-      return res.prompt();
+      res.prompt();
+      return;
     }
     global.queueOption = {};
     Job = includeAll({

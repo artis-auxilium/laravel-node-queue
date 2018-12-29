@@ -20,7 +20,8 @@ var prepareTmpFolder = function prepareTmpFolder() {
       unsafeCleanup: true
     }, function tmpDirCallback(err, name) {
       if (err) {
-        return reject(err);
+        reject(err);
+        return;
       }
       fs.mkdir(name + '/Config-laravel')
         .then(function tmpdirOk() {

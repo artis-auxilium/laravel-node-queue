@@ -25,7 +25,8 @@ var checkArtisan = function checkArtisan(cmdRes) {
   return new Promise(function promiseCheckArtisan(resolve, reject) {
     var test = cmdRes.match(/\s*Laravel\s+Framework\s+(version)?\s+(.*)/);
     if (test) {
-      return resolve(test);
+      resolve(test);
+      return;
     }
     reject(new Error('not a laravel framework'));
   });
