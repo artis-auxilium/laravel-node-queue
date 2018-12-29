@@ -21,8 +21,9 @@ module.exports = {
     process.argv = ['node', appdir + '/artisan'];
     bddStdin('help\n', BddStdin.keys.up, '\n', 'quit\n');
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     app.init({
       chdir: appdir + '/'

@@ -37,8 +37,9 @@ module.exports = {
     bddStdin('');
     process.argv = ['node', appdir + '/artisan', 'make:models'];
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     app.init({
       chdir: appdir + '/'
@@ -68,8 +69,9 @@ module.exports = {
     bddStdin('');
     process.argv = ['node', appdir + '/artisan', 'make:models'];
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     app.init({
       chdir: appdir + '/'
@@ -100,8 +102,9 @@ module.exports = {
     bddStdin('');
     process.argv = ['node', appdir + '/artisan', 'make:models'];
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     app.init({
       chdir: appdir + '/'
@@ -142,8 +145,9 @@ module.exports = {
 
     process.argv = ['node', appdir + '/artisan', 'make:models'];
     var unhookIntercept = intercept(function onIntercept(txt) {
-      stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
-      // return '';
+      if (typeof txt === 'string') {
+        stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
+      }
     });
     app.init({
       chdir: appdir + '/'
