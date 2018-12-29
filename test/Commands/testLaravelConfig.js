@@ -84,7 +84,7 @@ module.exports = {
     };
     app.start();
   },
-  'test write transorm fail': function testMakeCommandFail(test) {
+  'test write transform fail': function testMakeCommandFail(test) {
     var stdout = [];
     bddStdin('');
     process.argv = ['node', appdir + '/artisan', 'laravel:config'];
@@ -341,7 +341,7 @@ module.exports = {
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
       var toTest = [
-        'config example not trandformed',
+        'config example not transformed',
         'error in example file'
       ];
       each(toTest, function eachToTest(value) {

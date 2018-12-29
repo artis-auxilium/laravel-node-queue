@@ -164,9 +164,9 @@ module.exports = {
 
       })
 
-    .catch(function catchError(error) {
-      utils.displayError(error, res);
-    });
+      .catch(function catchError(error) {
+        utils.displayError(error, res);
+      });
 
   }
 };

@@ -17,8 +17,8 @@ app.logger.inspectOptions = {
 };
 /* istanbul ignore else*/
 if (app.config('app.debug')) {
-  process.env.DEBUG = logPrefix + '*';
-  console.log('set env.debug to ' + logPrefix + '*');
+  process.env.DEBUG = logPrefix + ':*';
+  console.log('set env.debug to ' + logPrefix + ':*');
 }
 
 app.trans = require('i18n');

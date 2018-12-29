@@ -11,11 +11,12 @@ var each = require('lodash/each');
 var Config = require('../../lib/Config');
 var debugLogger = require('debug-logger');
 var database, core, bddStdin;
+var globalApp;
 module.exports = {
   setUp: function setUp(callback) {
     bddStdin = new BddStdin().type;
     rewire('../utils/bootstrap');
-
+    globalApp = global.app;
     app.configure(function configureApp() {
       app.use(Shell.router({
         shell: app
@@ -27,8 +28,8 @@ module.exports = {
     callback();
   },
   tearDown: function tearDown(callback) {
-    app.config().set('database', database);
-    app.config().set('core', core);
+    globalApp.config().set('database', database);
+    globalApp.config().set('core', core);
     callback();
   },
   'test model creator': function testModelsCreator(test) {
@@ -184,7 +185,6 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
-      // return '';
     });
     app.init({
       chdir: appdir + '/'
@@ -200,7 +200,7 @@ module.exports = {
       unhookIntercept();
 
       var toTest = [
-        "ER_DBACCESS_DENIED_ERROR: Access denied for user 'testdb'@'localhost' to database 'notexist'"
+        "Access denied for user 'testdb'@'localhost' to database 'notexist'"
       ];
       each(toTest, function eachToTest(value) {
         test.ok(stdout.indexOf(value) > -1, value);

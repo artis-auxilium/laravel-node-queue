@@ -149,7 +149,7 @@ var nodeConfig = function nodeConfig() {
         transformer = require(appdir + '/lib/Config/' + toTransform);
         loaded = true;
       } catch (errorInUserLoad) {
-        error = 'cant find /lib/Config/' + toTransform + '.js';
+        error = `can't find /lib/Config/${toTransform}.js`;
       }
       if (loaded) {
         try {
@@ -166,10 +166,10 @@ var nodeConfig = function nodeConfig() {
           loaded = true;
 
         } catch (errorCoreload) {
-          if (!error || error === 'cant find /lib/Config/' + toTransform + '.js') {
+          if (!error || error === `can't find /lib/Config/${toTransform}.js`) {
             /* istanbul ignore else */
             if (errorCoreload.code) {
-              error = 'cant find /lib/Config/' + toTransform + '.js';
+              error = `can't find /lib/Config/${toTransform}.js`;
             } else {
               error = errorCoreload.message;
             }
@@ -179,7 +179,7 @@ var nodeConfig = function nodeConfig() {
       }
       if (!loaded) {
         conf = laravelConfig[toTransform];
-        response.red('config ' + toTransform + ' not trandformed').ln();
+        response.red('config ' + toTransform + ' not transformed').ln();
         response.red(error).ln();
       }
       var content = utils.formatConfig(conf);

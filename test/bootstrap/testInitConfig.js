@@ -36,7 +36,7 @@ module.exports = {
   },
   'test env default': function testEnvDefault(test) {
     test.expect(1);
-    test.equal(app.config().env('wiilNotExist', 'default'), 'default', 'env not match');
+    test.equal(app.config().env('willNotExist', 'default'), 'default', 'env not match');
     test.done();
   }
 

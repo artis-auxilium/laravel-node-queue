@@ -44,7 +44,7 @@ module.exports = {
     };
     app.start();
   },
-  'test help plugin custom intoduction': function customIntroduction(test) {
+  'test help plugin custom introduction': function customIntroduction(test) {
     var stdout = [];
     process.argv = ['node', appdir + '/artisan'];
     var unhookIntercept = intercept(function onIntercept(txt) {
@@ -110,7 +110,7 @@ module.exports = {
         '<2argument> ',
         '[<autre>] ',
         'Arguments:',
-        '  argument       test [default: "default"]\n  2argument      deuxieme argument \n  autre          [default: "pour"]\n',
+        '  argument        test [default: "default"]\n  2argument       deuxieme argument \n  autre           [default: "pour"]\n',
         'Options:',
         '--option            ',
         'test:second',
