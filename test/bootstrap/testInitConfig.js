@@ -15,7 +15,7 @@ module.exports = {
 
     global.app = {};
     app.logger = debugLogger;
-    app.config = new Config(appdir);
+    app.config = new Config(appdir, app.logger);
     callback();
   },
   tearDown: function tearDown(callback) {

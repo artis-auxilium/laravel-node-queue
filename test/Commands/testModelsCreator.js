@@ -132,7 +132,7 @@ module.exports = {
 
     global.app = new Shell();
     app.logger = debugLogger;
-    app.config = new Config(appdir);
+    app.config = new Config(appdir, app.logger);
     app.configure(function configureApp() {
       app.use(Shell.router({
         shell: app
@@ -173,7 +173,7 @@ module.exports = {
     bddStdin('');
     global.app = new Shell();
     app.logger = debugLogger;
-    app.config = new Config(appdir);
+    app.config = new Config(appdir, app.logger);
     app.configure(function configureApp() {
       app.use(Shell.router({
         shell: app

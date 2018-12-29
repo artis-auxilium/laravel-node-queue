@@ -1,11 +1,14 @@
 'use strict';
-/* global app,appdir,bug */
+/* global appdir,bug */
 var raven = require('raven');
 var defaults = require('lodash/defaults');
 var Config = require('../lib/Config');
+var Shell = require('../lib/shell');
 
-app.logger = require('debug-logger');
-app.config = new Config(appdir);
+
+var logger = Shell.prototype.logger = require('debug-logger');
+Shell.prototype.config = new Config(appdir, logger);
+let app = global.app = new Shell();
 var logPrefix = app.config('core.log.prefix');
 var console = app.logger(logPrefix + ':app');
 
