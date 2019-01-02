@@ -58,7 +58,7 @@ module.exports = {
         stdout.push(txt);
       }
 
-      // return '';
+      return '';
     });
     app.init({
       chdir: appdir + '/'
@@ -155,6 +155,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     app.init({
       chdir: appdir + '/'
@@ -196,6 +197,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     app.init({
       chdir: appdir + '/'
@@ -239,6 +241,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     app.init({
       chdir: appdir + '/'
@@ -273,6 +276,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     app.init({
       chdir: appdir + '/'
@@ -326,6 +330,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     app.init({
       chdir: appdir + '/'

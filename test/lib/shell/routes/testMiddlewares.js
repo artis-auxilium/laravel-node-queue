@@ -36,6 +36,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -65,6 +66,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -93,6 +95,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -121,6 +124,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -147,6 +151,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -179,6 +184,7 @@ module.exports = {
         test.equal(Math.round((end - start) / second), 2, 'time equal');
         res.prompt();
         test.done();
+        unhookIntercept();
       }
     ]);
     app.start();
