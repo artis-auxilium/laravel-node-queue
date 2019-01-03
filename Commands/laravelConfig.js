@@ -2,7 +2,6 @@
 /* global app,appdir */
 /* eslint global-require: 0 */
 
-var Promise = require('bluebird');
 var shelljs = require('shelljs');
 var utils = require('../lib/utilsCmd');
 var fs = require('fs-promise');

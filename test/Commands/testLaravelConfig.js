@@ -6,7 +6,6 @@
 var rewire = require('rewire');
 var each = require('lodash/each');
 var intercept = require('intercept-stdout');
-var promise = require('bluebird');
 var BddStdin = require('../utils/bdd-stdin');
 var shell = require('../../lib/shell');
 var fs = require('fs-promise');
@@ -41,10 +40,10 @@ module.exports = {
     process.argv = ['node', appdir + '/artisan', 'laravel:config'];
     var fsMock = {
       writeFile: function writeFile() {
-        return promise.reject(new Error('file not writable'));
+        return Promise.reject(new Error('file not writable'));
       },
       mkdir: function mkdir() {
-        return promise.resolve();
+        return Promise.resolve();
       }
     };
     laravelConfig.__set__({
@@ -91,7 +90,7 @@ module.exports = {
     var fsMock = clone(fs);
     fsMock.writeFile = function writeFile(file, content) {
       if ((/Config\/app\.js$/).test(file)) {
-        return promise.reject(new Error('file not writable'));
+        return Promise.reject(new Error('file not writable'));
       }
       return fs.writeFile(file, content);
     };
