@@ -2,7 +2,7 @@
 MODULE_DIR=$(pwd)
 BIN_DIR="${MODULE_DIR}/bin"
 PROJECT_DIR=$(realpath ../..)
-if [ -f "${PROJECT_DIR}/.env"]; then
+if [ -f "${PROJECT_DIR}/.env" ]; then
     touch "${PROJECT_DIR}/.env"
 fi
 if [ -d "${PROJECT_DIR}/Config" ]; then
