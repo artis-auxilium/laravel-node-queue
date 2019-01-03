@@ -25,7 +25,8 @@ var checkArtisan = function checkArtisan(cmdRes) {
   return new Promise(function promiseCheckArtisan(resolve, reject) {
     var test = cmdRes.match(/\s*Laravel\s+Framework\s+(version)?\s+(.*)/);
     if (test) {
-      return resolve(test);
+      resolve(test);
+      return;
     }
     reject(new Error('not a laravel framework'));
   });
@@ -100,7 +101,7 @@ var writeConf = function writeConf() {
     comment += "*\n";
     comment += "* config:\n";
     comment += "*     key: name of the config in laravel\n";
-    comment += "*          inport: - true import without ask\n";
+    comment += "*          import: - true import without ask\n";
     comment += "*                  - false don't import\n";
     comment += "*          asis: true same as laravel\n";
     comment += "*                false look for a file with the key name in lib/config folder\n";

@@ -36,6 +36,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -53,7 +54,6 @@ module.exports = {
         res.print('message from function');
 
         res.prompt();
-        // throw new Error('testr');
       }
     ]);
     app.start();
@@ -66,6 +66,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -80,14 +81,13 @@ module.exports = {
     app.cmd('test:middleware', [
       shell.routes.confirm('are you sure'),
       function afterMiddleware(req, res) {
-        // throw new Error('testr');
         res.print('message from function');
         res.prompt();
       }
     ]);
     app.start();
   },
-  'test shellonly Middelware No': function confirmMiddelwareNo(test) {
+  'test shell only Middelware No': function confirmMiddelwareNo(test) {
     var stdout = [];
     process.argv = ['node', appdir + '/artisan', 'test:middleware'];
     bddStdin('');
@@ -95,6 +95,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -115,7 +116,7 @@ module.exports = {
     ]);
     app.start();
   },
-  'test shellonly Middelware Yes': function confirmMiddelwareYes(test) {
+  'test shell only Middelware Yes': function confirmMiddelwareYes(test) {
     var stdout = [];
     process.argv = ['node', appdir + '/artisan'];
     bddStdin('', 'test:middleware\n', 'quit\n');
@@ -123,6 +124,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -149,6 +151,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     process.stdin.destroy = function stdinDestroy() {
       unhookIntercept();
@@ -181,6 +184,7 @@ module.exports = {
         test.equal(Math.round((end - start) / second), 2, 'time equal');
         res.prompt();
         test.done();
+        unhookIntercept();
       }
     ]);
     app.start();

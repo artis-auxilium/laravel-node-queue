@@ -24,6 +24,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     process.argv = ['node', appdir + '/artisan'];
     bddStdin('help\n', 'quit\n');
@@ -52,6 +53,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     bddStdin('help\n', 'quit\n');
     app.init({
@@ -80,6 +82,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     process.argv = ['node', appdir + '/artisan'];
     bddStdin('help test\n', 'help test:second\n', 'help test:third\n', 'help not:found\n', 'quit\n');

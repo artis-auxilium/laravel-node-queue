@@ -24,6 +24,7 @@ module.exports = {
       if (typeof txt === 'string') {
         stdout.push(txt.replace(/\u001b\[.*?m/g, ''));
       }
+      return '';
     });
     var appTest = rewire('../../bootstrap/app');
     var fakeRedis = new FakeRedis();

@@ -2,7 +2,6 @@
 /* global app,appdir */
 /* eslint global-require: 0 */
 
-var Promise = require('bluebird');
 var shelljs = require('shelljs');
 var utils = require('../lib/utilsCmd');
 var fs = require('fs-promise');
@@ -20,7 +19,8 @@ var prepareTmpFolder = function prepareTmpFolder() {
       unsafeCleanup: true
     }, function tmpDirCallback(err, name) {
       if (err) {
-        return reject(err);
+        reject(err);
+        return;
       }
       fs.mkdir(name + '/Config-laravel')
         .then(function tmpdirOk() {

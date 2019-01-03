@@ -1,4 +1,5 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/83770719db9d4480a1f2162c3399c325)](https://www.codacy.com/app/icfr/laravel-node-queue_2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=artis-auxilium/laravel-node-queue&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/83770719db9d4480a1f2162c3399c325)](https://www.codacy.com/app/icfr/laravel-node-queue_2?utm_source=github.com&utm_medium=referral&utm_content=artis-auxilium/laravel-node-queue&utm_campaign=Badge_Coverage)
 
 # node server for Laravel queue
 
@@ -22,7 +23,7 @@ Install laravel-queue
 npm install --save laravel-queue
 ```
 
-After init the apllication
+After init the application
 
 ```
 ./artisan init
@@ -31,7 +32,7 @@ After init the apllication
 It ask for laravel project path then ask for command path
 (relative to laravel project path)
 then when asked add this to Console/kernel.php
-> if your commands folder is not standart(e.g app/Console/Commands),
+> if your commands folder is not standard(e.g app/Console/Commands),
 dont forget to change namespace of the class
 
 ```php
