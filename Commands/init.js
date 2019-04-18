@@ -23,7 +23,7 @@ var askLaravelFolder = function askLaravelFolder() {
 
 var checkArtisan = function checkArtisan(cmdRes) {
   return new Promise(function promiseCheckArtisan(resolve, reject) {
-    var test = cmdRes.match(/\s*Laravel\s+Framework\s+(version)?\s+(.*)/);
+    var test = cmdRes.match(/\s*Laravel\s+Framework\s+(version)?\s*(.*)/);
     if (test) {
       resolve(test);
       return;
